@@ -1,0 +1,2506 @@
+[
+    {
+      "json_agg": [
+        {
+          "table_name": "places",
+          "column_name": "lat"
+        },
+        {
+          "table_name": "places",
+          "column_name": "lng"
+        },
+        {
+          "table_name": "places",
+          "column_name": "auto_geofence"
+        },
+        {
+          "table_name": "places",
+          "column_name": "geofence_radius"
+        },
+        {
+          "table_name": "places",
+          "column_name": "geofence_id"
+        },
+        {
+          "table_name": "places",
+          "column_name": "visit_count"
+        },
+        {
+          "table_name": "places",
+          "column_name": "last_visited"
+        },
+        {
+          "table_name": "places",
+          "column_name": "is_active"
+        },
+        {
+          "table_name": "places",
+          "column_name": "created_at"
+        },
+        {
+          "table_name": "alerts",
+          "column_name": "id"
+        },
+        {
+          "table_name": "alerts",
+          "column_name": "organization_id"
+        },
+        {
+          "table_name": "alerts",
+          "column_name": "vehicle_id"
+        },
+        {
+          "table_name": "alerts",
+          "column_name": "geofence_id"
+        },
+        {
+          "table_name": "alerts",
+          "column_name": "trip_id"
+        },
+        {
+          "table_name": "brain_projects",
+          "column_name": "links"
+        },
+        {
+          "table_name": "brain_projects",
+          "column_name": "created_at"
+        },
+        {
+          "table_name": "alerts",
+          "column_name": "data"
+        },
+        {
+          "table_name": "alerts",
+          "column_name": "lat"
+        },
+        {
+          "table_name": "alerts",
+          "column_name": "lng"
+        },
+        {
+          "table_name": "brain_projects",
+          "column_name": "updated_at"
+        },
+        {
+          "table_name": "alerts",
+          "column_name": "notified_at"
+        },
+        {
+          "table_name": "alerts",
+          "column_name": "notified_via"
+        },
+        {
+          "table_name": "alerts",
+          "column_name": "is_read"
+        },
+        {
+          "table_name": "alerts",
+          "column_name": "read_at"
+        },
+        {
+          "table_name": "alerts",
+          "column_name": "read_by"
+        },
+        {
+          "table_name": "alerts",
+          "column_name": "resolved_at"
+        },
+        {
+          "table_name": "alerts",
+          "column_name": "resolved_by"
+        },
+        {
+          "table_name": "alerts",
+          "column_name": "recorded_at"
+        },
+        {
+          "table_name": "alerts",
+          "column_name": "created_at"
+        },
+        {
+          "table_name": "trips",
+          "column_name": "id"
+        },
+        {
+          "table_name": "trips",
+          "column_name": "organization_id"
+        },
+        {
+          "table_name": "trips",
+          "column_name": "vehicle_id"
+        },
+        {
+          "table_name": "trips",
+          "column_name": "driver_id"
+        },
+        {
+          "table_name": "trips",
+          "column_name": "route_id"
+        },
+        {
+          "table_name": "trips",
+          "column_name": "started_at"
+        },
+        {
+          "table_name": "trips",
+          "column_name": "ended_at"
+        },
+        {
+          "table_name": "trips",
+          "column_name": "duration_seconds"
+        },
+        {
+          "table_name": "trips",
+          "column_name": "distance_km"
+        },
+        {
+          "table_name": "trips",
+          "column_name": "max_speed_kmh"
+        },
+        {
+          "table_name": "trips",
+          "column_name": "avg_speed_kmh"
+        },
+        {
+          "table_name": "trips",
+          "column_name": "idle_seconds"
+        },
+        {
+          "table_name": "trips",
+          "column_name": "start_location"
+        },
+        {
+          "table_name": "trips",
+          "column_name": "end_location"
+        },
+        {
+          "table_name": "brain_habit_logs",
+          "column_name": "id"
+        },
+        {
+          "table_name": "trips",
+          "column_name": "optimal_distance_km"
+        },
+        {
+          "table_name": "trips",
+          "column_name": "optimal_duration_min"
+        },
+        {
+          "table_name": "trips",
+          "column_name": "efficiency_score"
+        },
+        {
+          "table_name": "trips",
+          "column_name": "excess_distance_km"
+        },
+        {
+          "table_name": "trips",
+          "column_name": "excess_minutes"
+        },
+        {
+          "table_name": "trips",
+          "column_name": "behavior_score"
+        },
+        {
+          "table_name": "trips",
+          "column_name": "harsh_braking"
+        },
+        {
+          "table_name": "trips",
+          "column_name": "harsh_accel"
+        },
+        {
+          "table_name": "trips",
+          "column_name": "speeding_events"
+        },
+        {
+          "table_name": "trips",
+          "column_name": "traffic_delay_min"
+        },
+        {
+          "table_name": "brain_habit_logs",
+          "column_name": "habit_id"
+        },
+        {
+          "table_name": "trips",
+          "column_name": "fuel_used_liters"
+        },
+        {
+          "table_name": "trips",
+          "column_name": "fuel_cost"
+        },
+        {
+          "table_name": "plans",
+          "column_name": "price_usd_monthly"
+        },
+        {
+          "table_name": "trips",
+          "column_name": "created_at"
+        },
+        {
+          "table_name": "planned_routes",
+          "column_name": "id"
+        },
+        {
+          "table_name": "planned_routes",
+          "column_name": "organization_id"
+        },
+        {
+          "table_name": "planned_routes",
+          "column_name": "vehicle_id"
+        },
+        {
+          "table_name": "planned_routes",
+          "column_name": "created_by"
+        },
+        {
+          "table_name": "planned_routes",
+          "column_name": "driver_id"
+        },
+        {
+          "table_name": "plans",
+          "column_name": "price_usd_yearly"
+        },
+        {
+          "table_name": "plans",
+          "column_name": "max_vehicles"
+        },
+        {
+          "table_name": "planned_routes",
+          "column_name": "origin_lat"
+        },
+        {
+          "table_name": "planned_routes",
+          "column_name": "origin_lng"
+        },
+        {
+          "table_name": "plans",
+          "column_name": "max_users"
+        },
+        {
+          "table_name": "plans",
+          "column_name": "max_geofences"
+        },
+        {
+          "table_name": "planned_routes",
+          "column_name": "dest_lat"
+        },
+        {
+          "table_name": "planned_routes",
+          "column_name": "dest_lng"
+        },
+        {
+          "table_name": "planned_routes",
+          "column_name": "waypoints"
+        },
+        {
+          "table_name": "planned_routes",
+          "column_name": "google_route"
+        },
+        {
+          "table_name": "planned_routes",
+          "column_name": "distance_km"
+        },
+        {
+          "table_name": "planned_routes",
+          "column_name": "duration_min"
+        },
+        {
+          "table_name": "planned_routes",
+          "column_name": "duration_traffic"
+        },
+        {
+          "table_name": "plans",
+          "column_name": "max_alerts"
+        },
+        {
+          "table_name": "planned_routes",
+          "column_name": "deviation_meters"
+        },
+        {
+          "table_name": "planned_routes",
+          "column_name": "notify_on_arrive"
+        },
+        {
+          "table_name": "planned_routes",
+          "column_name": "notify_on_deviate"
+        },
+        {
+          "table_name": "planned_routes",
+          "column_name": "notify_contacts"
+        },
+        {
+          "table_name": "plans",
+          "column_name": "history_days"
+        },
+        {
+          "table_name": "planned_routes",
+          "column_name": "started_at"
+        },
+        {
+          "table_name": "planned_routes",
+          "column_name": "completed_at"
+        },
+        {
+          "table_name": "planned_routes",
+          "column_name": "actual_duration"
+        },
+        {
+          "table_name": "planned_routes",
+          "column_name": "created_at"
+        },
+        {
+          "table_name": "planned_routes",
+          "column_name": "updated_at"
+        },
+        {
+          "table_name": "route_events",
+          "column_name": "id"
+        },
+        {
+          "table_name": "route_events",
+          "column_name": "route_id"
+        },
+        {
+          "table_name": "route_events",
+          "column_name": "vehicle_id"
+        },
+        {
+          "table_name": "plans",
+          "column_name": "max_planned_routes"
+        },
+        {
+          "table_name": "route_events",
+          "column_name": "lat"
+        },
+        {
+          "table_name": "route_events",
+          "column_name": "lng"
+        },
+        {
+          "table_name": "plans",
+          "column_name": "features"
+        },
+        {
+          "table_name": "route_events",
+          "column_name": "data"
+        },
+        {
+          "table_name": "route_events",
+          "column_name": "recorded_at"
+        },
+        {
+          "table_name": "route_events",
+          "column_name": "created_at"
+        },
+        {
+          "table_name": "subscriptions",
+          "column_name": "id"
+        },
+        {
+          "table_name": "subscriptions",
+          "column_name": "organization_id"
+        },
+        {
+          "table_name": "subscriptions",
+          "column_name": "plan_id"
+        },
+        {
+          "table_name": "subscriptions",
+          "column_name": "country_id"
+        },
+        {
+          "table_name": "plans",
+          "column_name": "is_active"
+        },
+        {
+          "table_name": "subscriptions",
+          "column_name": "current_period_start"
+        },
+        {
+          "table_name": "subscriptions",
+          "column_name": "current_period_end"
+        },
+        {
+          "table_name": "subscriptions",
+          "column_name": "cancel_at_period_end"
+        },
+        {
+          "table_name": "subscriptions",
+          "column_name": "cancelled_at"
+        },
+        {
+          "table_name": "plans",
+          "column_name": "is_public"
+        },
+        {
+          "table_name": "plans",
+          "column_name": "is_featured"
+        },
+        {
+          "table_name": "subscriptions",
+          "column_name": "amount"
+        },
+        {
+          "table_name": "plans",
+          "column_name": "sort_order"
+        },
+        {
+          "table_name": "brain_habit_logs",
+          "column_name": "log_date"
+        },
+        {
+          "table_name": "brain_habit_logs",
+          "column_name": "completed"
+        },
+        {
+          "table_name": "subscriptions",
+          "column_name": "discount_percent"
+        },
+        {
+          "table_name": "subscriptions",
+          "column_name": "metadata"
+        },
+        {
+          "table_name": "subscriptions",
+          "column_name": "created_at"
+        },
+        {
+          "table_name": "subscriptions",
+          "column_name": "updated_at"
+        },
+        {
+          "table_name": "payments",
+          "column_name": "id"
+        },
+        {
+          "table_name": "payments",
+          "column_name": "organization_id"
+        },
+        {
+          "table_name": "payments",
+          "column_name": "subscription_id"
+        },
+        {
+          "table_name": "payments",
+          "column_name": "country_id"
+        },
+        {
+          "table_name": "payments",
+          "column_name": "amount"
+        },
+        {
+          "table_name": "plans",
+          "column_name": "created_at"
+        },
+        {
+          "table_name": "payments",
+          "column_name": "tax_amount"
+        },
+        {
+          "table_name": "payments",
+          "column_name": "total_amount"
+        },
+        {
+          "table_name": "plans",
+          "column_name": "updated_at"
+        },
+        {
+          "table_name": "plan_prices",
+          "column_name": "id"
+        },
+        {
+          "table_name": "plan_prices",
+          "column_name": "plan_id"
+        },
+        {
+          "table_name": "plan_prices",
+          "column_name": "country_id"
+        },
+        {
+          "table_name": "plan_prices",
+          "column_name": "price_monthly"
+        },
+        {
+          "table_name": "plan_prices",
+          "column_name": "price_yearly"
+        },
+        {
+          "table_name": "brain_habit_logs",
+          "column_name": "value"
+        },
+        {
+          "table_name": "payments",
+          "column_name": "paid_at"
+        },
+        {
+          "table_name": "payments",
+          "column_name": "created_at"
+        },
+        {
+          "table_name": "installation_jobs",
+          "column_name": "id"
+        },
+        {
+          "table_name": "installation_jobs",
+          "column_name": "installer_id"
+        },
+        {
+          "table_name": "installation_jobs",
+          "column_name": "device_id"
+        },
+        {
+          "table_name": "installation_jobs",
+          "column_name": "vehicle_id"
+        },
+        {
+          "table_name": "installation_jobs",
+          "column_name": "organization_id"
+        },
+        {
+          "table_name": "installation_jobs",
+          "column_name": "scheduled_at"
+        },
+        {
+          "table_name": "plan_prices",
+          "column_name": "is_active"
+        },
+        {
+          "table_name": "plan_prices",
+          "column_name": "created_at"
+        },
+        {
+          "table_name": "countries",
+          "column_name": "id"
+        },
+        {
+          "table_name": "devices",
+          "column_name": "battery_level"
+        },
+        {
+          "table_name": "brain_habit_logs",
+          "column_name": "created_at"
+        },
+        {
+          "table_name": "installation_jobs",
+          "column_name": "completed_at"
+        },
+        {
+          "table_name": "installation_jobs",
+          "column_name": "duration_min"
+        },
+        {
+          "table_name": "installation_jobs",
+          "column_name": "install_photos"
+        },
+        {
+          "table_name": "brain_journal_entries",
+          "column_name": "id"
+        },
+        {
+          "table_name": "installation_jobs",
+          "column_name": "rating"
+        },
+        {
+          "table_name": "brain_journal_entries",
+          "column_name": "item_id"
+        },
+        {
+          "table_name": "installation_jobs",
+          "column_name": "reviewed_at"
+        },
+        {
+          "table_name": "installation_jobs",
+          "column_name": "commission_amount"
+        },
+        {
+          "table_name": "installation_jobs",
+          "column_name": "commission_paid"
+        },
+        {
+          "table_name": "installation_jobs",
+          "column_name": "commission_paid_at"
+        },
+        {
+          "table_name": "installation_jobs",
+          "column_name": "created_at"
+        },
+        {
+          "table_name": "installation_jobs",
+          "column_name": "updated_at"
+        },
+        {
+          "table_name": "audit_logs",
+          "column_name": "id"
+        },
+        {
+          "table_name": "audit_logs",
+          "column_name": "organization_id"
+        },
+        {
+          "table_name": "audit_logs",
+          "column_name": "user_id"
+        },
+        {
+          "table_name": "audit_logs",
+          "column_name": "installer_id"
+        },
+        {
+          "table_name": "audit_logs",
+          "column_name": "platform_admin_id"
+        },
+        {
+          "table_name": "devices",
+          "column_name": "signal_strength"
+        },
+        {
+          "table_name": "devices",
+          "column_name": "is_online"
+        },
+        {
+          "table_name": "audit_logs",
+          "column_name": "resource_id"
+        },
+        {
+          "table_name": "audit_logs",
+          "column_name": "changes"
+        },
+        {
+          "table_name": "countries",
+          "column_name": "tax_rate"
+        },
+        {
+          "table_name": "brain_journal_entries",
+          "column_name": "mood"
+        },
+        {
+          "table_name": "audit_logs",
+          "column_name": "created_at"
+        },
+        {
+          "table_name": "platform_admins",
+          "column_name": "id"
+        },
+        {
+          "table_name": "brain_journal_entries",
+          "column_name": "energy_level"
+        },
+        {
+          "table_name": "countries",
+          "column_name": "is_active"
+        },
+        {
+          "table_name": "countries",
+          "column_name": "launched_at"
+        },
+        {
+          "table_name": "countries",
+          "column_name": "created_at"
+        },
+        {
+          "table_name": "organizations",
+          "column_name": "id"
+        },
+        {
+          "table_name": "platform_admins",
+          "column_name": "permissions"
+        },
+        {
+          "table_name": "platform_admins",
+          "column_name": "last_login"
+        },
+        {
+          "table_name": "platform_admins",
+          "column_name": "is_active"
+        },
+        {
+          "table_name": "platform_admins",
+          "column_name": "created_at"
+        },
+        {
+          "table_name": "_VehicleGeofences",
+          "column_name": "A"
+        },
+        {
+          "table_name": "_VehicleGeofences",
+          "column_name": "B"
+        },
+        {
+          "table_name": "maintenance_records",
+          "column_name": "id"
+        },
+        {
+          "table_name": "maintenance_records",
+          "column_name": "organization_id"
+        },
+        {
+          "table_name": "maintenance_records",
+          "column_name": "vehicle_id"
+        },
+        {
+          "table_name": "organizations",
+          "column_name": "country_id"
+        },
+        {
+          "table_name": "organizations",
+          "column_name": "plan_id"
+        },
+        {
+          "table_name": "brain_journal_entries",
+          "column_name": "extracted_insights"
+        },
+        {
+          "table_name": "maintenance_records",
+          "column_name": "scheduled_date"
+        },
+        {
+          "table_name": "maintenance_records",
+          "column_name": "scheduled_km"
+        },
+        {
+          "table_name": "maintenance_records",
+          "column_name": "next_service_km"
+        },
+        {
+          "table_name": "maintenance_records",
+          "column_name": "completed_date"
+        },
+        {
+          "table_name": "maintenance_records",
+          "column_name": "completed_km"
+        },
+        {
+          "table_name": "maintenance_records",
+          "column_name": "completed_by"
+        },
+        {
+          "table_name": "maintenance_records",
+          "column_name": "cost"
+        },
+        {
+          "table_name": "brain_journal_entries",
+          "column_name": "created_at"
+        },
+        {
+          "table_name": "brain_financial_transactions",
+          "column_name": "id"
+        },
+        {
+          "table_name": "maintenance_records",
+          "column_name": "created_at"
+        },
+        {
+          "table_name": "notifications",
+          "column_name": "id"
+        },
+        {
+          "table_name": "notifications",
+          "column_name": "organization_id"
+        },
+        {
+          "table_name": "notifications",
+          "column_name": "user_id"
+        },
+        {
+          "table_name": "notifications",
+          "column_name": "alert_id"
+        },
+        {
+          "table_name": "brain_financial_transactions",
+          "column_name": "item_id"
+        },
+        {
+          "table_name": "device_events",
+          "column_name": "position_data"
+        },
+        {
+          "table_name": "brain_financial_transactions",
+          "column_name": "amount"
+        },
+        {
+          "table_name": "notifications",
+          "column_name": "data"
+        },
+        {
+          "table_name": "device_events",
+          "column_name": "attributes"
+        },
+        {
+          "table_name": "organizations",
+          "column_name": "address"
+        },
+        {
+          "table_name": "notifications",
+          "column_name": "sent_at"
+        },
+        {
+          "table_name": "notifications",
+          "column_name": "read_at"
+        },
+        {
+          "table_name": "notifications",
+          "column_name": "created_at"
+        },
+        {
+          "table_name": "notifications",
+          "column_name": "leido"
+        },
+        {
+          "table_name": "devices",
+          "column_name": "created_at"
+        },
+        {
+          "table_name": "organizations",
+          "column_name": "trial_ends_at"
+        },
+        {
+          "table_name": "organizations",
+          "column_name": "plan_expires_at"
+        },
+        {
+          "table_name": "organizations",
+          "column_name": "settings"
+        },
+        {
+          "table_name": "organizations",
+          "column_name": "onboarding_completed"
+        },
+        {
+          "table_name": "organizations",
+          "column_name": "onboarding_steps"
+        },
+        {
+          "table_name": "devices",
+          "column_name": "updated_at"
+        },
+        {
+          "table_name": "organizations",
+          "column_name": "suspended_at"
+        },
+        {
+          "table_name": "brain_items",
+          "column_name": "id"
+        },
+        {
+          "table_name": "organizations",
+          "column_name": "deleted_at"
+        },
+        {
+          "table_name": "organizations",
+          "column_name": "created_at"
+        },
+        {
+          "table_name": "organizations",
+          "column_name": "updated_at"
+        },
+        {
+          "table_name": "users",
+          "column_name": "id"
+        },
+        {
+          "table_name": "users",
+          "column_name": "organization_id"
+        },
+        {
+          "table_name": "brain_items",
+          "column_name": "inbox_id"
+        },
+        {
+          "table_name": "brain_financial_transactions",
+          "column_name": "is_recurring"
+        },
+        {
+          "table_name": "brain_financial_transactions",
+          "column_name": "transaction_date"
+        },
+        {
+          "table_name": "brain_financial_transactions",
+          "column_name": "created_at"
+        },
+        {
+          "table_name": "brain_decisions",
+          "column_name": "id"
+        },
+        {
+          "table_name": "brain_decisions",
+          "column_name": "item_id"
+        },
+        {
+          "table_name": "device_events",
+          "column_name": "created_at"
+        },
+        {
+          "table_name": "users",
+          "column_name": "permissions"
+        },
+        {
+          "table_name": "users",
+          "column_name": "preferences"
+        },
+        {
+          "table_name": "brain_decisions",
+          "column_name": "options"
+        },
+        {
+          "table_name": "users",
+          "column_name": "email_verified"
+        },
+        {
+          "table_name": "users",
+          "column_name": "invited_by"
+        },
+        {
+          "table_name": "devices",
+          "column_name": "id"
+        },
+        {
+          "table_name": "users",
+          "column_name": "invite_expires"
+        },
+        {
+          "table_name": "users",
+          "column_name": "last_login"
+        },
+        {
+          "table_name": "users",
+          "column_name": "created_at"
+        },
+        {
+          "table_name": "users",
+          "column_name": "updated_at"
+        },
+        {
+          "table_name": "installers",
+          "column_name": "id"
+        },
+        {
+          "table_name": "installers",
+          "column_name": "country_id"
+        },
+        {
+          "table_name": "devices",
+          "column_name": "organization_id"
+        },
+        {
+          "table_name": "devices",
+          "column_name": "installer_id"
+        },
+        {
+          "table_name": "device_events",
+          "column_name": "device_id"
+        },
+        {
+          "table_name": "brain_decisions",
+          "column_name": "outcome_date"
+        },
+        {
+          "table_name": "brain_decisions",
+          "column_name": "satisfaction"
+        },
+        {
+          "table_name": "devices",
+          "column_name": "installed_at"
+        },
+        {
+          "table_name": "installers",
+          "column_name": "company_address"
+        },
+        {
+          "table_name": "installers",
+          "column_name": "coverage_zones"
+        },
+        {
+          "table_name": "installers",
+          "column_name": "certified_devices"
+        },
+        {
+          "table_name": "installers",
+          "column_name": "total_installs"
+        },
+        {
+          "table_name": "installers",
+          "column_name": "active_devices"
+        },
+        {
+          "table_name": "installers",
+          "column_name": "avg_rating"
+        },
+        {
+          "table_name": "installers",
+          "column_name": "commission_rate"
+        },
+        {
+          "table_name": "brain_decisions",
+          "column_name": "reversible"
+        },
+        {
+          "table_name": "installers",
+          "column_name": "payment_info"
+        },
+        {
+          "table_name": "brain_decisions",
+          "column_name": "decision_date"
+        },
+        {
+          "table_name": "brain_decisions",
+          "column_name": "created_at"
+        },
+        {
+          "table_name": "installers",
+          "column_name": "is_verified"
+        },
+        {
+          "table_name": "installers",
+          "column_name": "certified_at"
+        },
+        {
+          "table_name": "installers",
+          "column_name": "created_at"
+        },
+        {
+          "table_name": "installers",
+          "column_name": "updated_at"
+        },
+        {
+          "table_name": "vehicle_drivers",
+          "column_name": "vehicle_id"
+        },
+        {
+          "table_name": "vehicle_drivers",
+          "column_name": "user_id"
+        },
+        {
+          "table_name": "vehicle_drivers",
+          "column_name": "assigned_at"
+        },
+        {
+          "table_name": "vehicle_drivers",
+          "column_name": "assigned_by"
+        },
+        {
+          "table_name": "savings_stats",
+          "column_name": "id"
+        },
+        {
+          "table_name": "savings_stats",
+          "column_name": "organization_id"
+        },
+        {
+          "table_name": "savings_stats",
+          "column_name": "month"
+        },
+        {
+          "table_name": "savings_stats",
+          "column_name": "fuel_saved"
+        },
+        {
+          "table_name": "savings_stats",
+          "column_name": "maintenance_saved"
+        },
+        {
+          "table_name": "savings_stats",
+          "column_name": "total_saved"
+        },
+        {
+          "table_name": "savings_stats",
+          "column_name": "created_at"
+        },
+        {
+          "table_name": "vehicles",
+          "column_name": "id"
+        },
+        {
+          "table_name": "vehicles",
+          "column_name": "organization_id"
+        },
+        {
+          "table_name": "vehicles",
+          "column_name": "device_id"
+        },
+        {
+          "table_name": "brain_decisions",
+          "column_name": "updated_at"
+        },
+        {
+          "table_name": "brain_today_habits",
+          "column_name": "habit_id"
+        },
+        {
+          "table_name": "brain_items",
+          "column_name": "ai_analysis"
+        },
+        {
+          "table_name": "devices",
+          "column_name": "installed_by"
+        },
+        {
+          "table_name": "brain_today_habits",
+          "column_name": "target_value"
+        },
+        {
+          "table_name": "brain_items",
+          "column_name": "due_date"
+        },
+        {
+          "table_name": "vehicles",
+          "column_name": "year"
+        },
+        {
+          "table_name": "brain_items",
+          "column_name": "completed_at"
+        },
+        {
+          "table_name": "brain_today_habits",
+          "column_name": "streak_current"
+        },
+        {
+          "table_name": "vehicles",
+          "column_name": "fuel_efficiency"
+        },
+        {
+          "table_name": "brain_today_habits",
+          "column_name": "completed_today"
+        },
+        {
+          "table_name": "vehicles",
+          "column_name": "primary_driver_id"
+        },
+        {
+          "table_name": "brain_today_habits",
+          "column_name": "today_value"
+        },
+        {
+          "table_name": "vehicles",
+          "column_name": "current_location"
+        },
+        {
+          "table_name": "vehicles",
+          "column_name": "odometer_km"
+        },
+        {
+          "table_name": "vehicles",
+          "column_name": "odometer_updated"
+        },
+        {
+          "table_name": "vehicles",
+          "column_name": "obd_data"
+        },
+        {
+          "table_name": "vehicles",
+          "column_name": "alert_config"
+        },
+        {
+          "table_name": "brain_items",
+          "column_name": "created_at"
+        },
+        {
+          "table_name": "vehicles",
+          "column_name": "created_at"
+        },
+        {
+          "table_name": "vehicles",
+          "column_name": "updated_at"
+        },
+        {
+          "table_name": "brain_habits",
+          "column_name": "id"
+        },
+        {
+          "table_name": "brain_habits",
+          "column_name": "item_id"
+        },
+        {
+          "table_name": "brain_monthly_finances",
+          "column_name": "month"
+        },
+        {
+          "table_name": "brain_items",
+          "column_name": "updated_at"
+        },
+        {
+          "table_name": "brain_habits",
+          "column_name": "frequency_config"
+        },
+        {
+          "table_name": "brain_habits",
+          "column_name": "target_value"
+        },
+        {
+          "table_name": "devices",
+          "column_name": "install_photos"
+        },
+        {
+          "table_name": "brain_monthly_finances",
+          "column_name": "total"
+        },
+        {
+          "table_name": "brain_habits",
+          "column_name": "streak_current"
+        },
+        {
+          "table_name": "brain_habits",
+          "column_name": "streak_best"
+        },
+        {
+          "table_name": "brain_habits",
+          "column_name": "active"
+        },
+        {
+          "table_name": "brain_habits",
+          "column_name": "created_at"
+        },
+        {
+          "table_name": "vehicle_documents",
+          "column_name": "id"
+        },
+        {
+          "table_name": "vehicle_documents",
+          "column_name": "vehicle_id"
+        },
+        {
+          "table_name": "brain_monthly_finances",
+          "column_name": "count"
+        },
+        {
+          "table_name": "vehicle_documents",
+          "column_name": "issue_date"
+        },
+        {
+          "table_name": "vehicle_documents",
+          "column_name": "expiration_date"
+        },
+        {
+          "table_name": "brain_timeline",
+          "column_name": "id"
+        },
+        {
+          "table_name": "brain_tasks",
+          "column_name": "id"
+        },
+        {
+          "table_name": "vehicle_documents",
+          "column_name": "created_at"
+        },
+        {
+          "table_name": "vehicle_documents",
+          "column_name": "updated_at"
+        },
+        {
+          "table_name": "vehicle_documents",
+          "column_name": "expires_at"
+        },
+        {
+          "table_name": "vehicle_documents",
+          "column_name": "organization_id"
+        },
+        {
+          "table_name": "brain_inbox",
+          "column_name": "id"
+        },
+        {
+          "table_name": "brain_tasks",
+          "column_name": "item_id"
+        },
+        {
+          "table_name": "device_events",
+          "column_name": "server_time"
+        },
+        {
+          "table_name": "brain_inbox",
+          "column_name": "metadata"
+        },
+        {
+          "table_name": "brain_tasks",
+          "column_name": "project_id"
+        },
+        {
+          "table_name": "devices",
+          "column_name": "config"
+        },
+        {
+          "table_name": "brain_inbox",
+          "column_name": "classified_item_id"
+        },
+        {
+          "table_name": "brain_inbox",
+          "column_name": "created_at"
+        },
+        {
+          "table_name": "brain_inbox",
+          "column_name": "processed_at"
+        },
+        {
+          "table_name": "vehicle_weekly_stats",
+          "column_name": "id"
+        },
+        {
+          "table_name": "devices",
+          "column_name": "last_seen"
+        },
+        {
+          "table_name": "vehicle_weekly_stats",
+          "column_name": "week_start"
+        },
+        {
+          "table_name": "vehicle_weekly_stats",
+          "column_name": "km_total"
+        },
+        {
+          "table_name": "vehicle_weekly_stats",
+          "column_name": "driving_minutes"
+        },
+        {
+          "table_name": "vehicle_weekly_stats",
+          "column_name": "trips_count"
+        },
+        {
+          "table_name": "vehicle_weekly_stats",
+          "column_name": "max_speed_kmh"
+        },
+        {
+          "table_name": "vehicle_weekly_stats",
+          "column_name": "avg_speed_kmh"
+        },
+        {
+          "table_name": "vehicle_weekly_stats",
+          "column_name": "overspeed_count"
+        },
+        {
+          "table_name": "vehicle_weekly_stats",
+          "column_name": "harsh_brake_count"
+        },
+        {
+          "table_name": "vehicle_weekly_stats",
+          "column_name": "harsh_accel_count"
+        },
+        {
+          "table_name": "vehicle_weekly_stats",
+          "column_name": "score"
+        },
+        {
+          "table_name": "vehicle_weekly_stats",
+          "column_name": "prev_score"
+        },
+        {
+          "table_name": "vehicle_weekly_stats",
+          "column_name": "prev_km"
+        },
+        {
+          "table_name": "vehicle_weekly_stats",
+          "column_name": "daily_km"
+        },
+        {
+          "table_name": "vehicle_weekly_stats",
+          "column_name": "calculated_at"
+        },
+        {
+          "table_name": "vehicle_weekly_stats",
+          "column_name": "created_at"
+        },
+        {
+          "table_name": "vehicle_weekly_stats",
+          "column_name": "updated_at"
+        },
+        {
+          "table_name": "vehicle_weekly_stats",
+          "column_name": "organization_id"
+        },
+        {
+          "table_name": "leads",
+          "column_name": "id"
+        },
+        {
+          "table_name": "brain_tasks",
+          "column_name": "recurrence"
+        },
+        {
+          "table_name": "leads",
+          "column_name": "created_at"
+        },
+        {
+          "table_name": "brain_chat_history",
+          "column_name": "id"
+        },
+        {
+          "table_name": "brain_timeline",
+          "column_name": "due_date"
+        },
+        {
+          "table_name": "brain_timeline",
+          "column_name": "created_at"
+        },
+        {
+          "table_name": "brain_timeline",
+          "column_name": "updated_at"
+        },
+        {
+          "table_name": "brain_chat_history",
+          "column_name": "created_at"
+        },
+        {
+          "table_name": "brain_focus",
+          "column_name": "id"
+        },
+        {
+          "table_name": "brain_focus",
+          "column_name": "focus_date"
+        },
+        {
+          "table_name": "brain_pending_tasks",
+          "column_name": "task_id"
+        },
+        {
+          "table_name": "brain_focus",
+          "column_name": "achieved"
+        },
+        {
+          "table_name": "brain_focus",
+          "column_name": "created_at"
+        },
+        {
+          "table_name": "brain_tasks",
+          "column_name": "completed_at"
+        },
+        {
+          "table_name": "brain_tasks",
+          "column_name": "created_at"
+        },
+        {
+          "table_name": "_prisma_migrations",
+          "column_name": "finished_at"
+        },
+        {
+          "table_name": "brain_projects",
+          "column_name": "id"
+        },
+        {
+          "table_name": "brain_projects",
+          "column_name": "item_id"
+        },
+        {
+          "table_name": "_prisma_migrations",
+          "column_name": "rolled_back_at"
+        },
+        {
+          "table_name": "_prisma_migrations",
+          "column_name": "started_at"
+        },
+        {
+          "table_name": "_prisma_migrations",
+          "column_name": "applied_steps_count"
+        },
+        {
+          "table_name": "geocoding_cache",
+          "column_name": "id"
+        },
+        {
+          "table_name": "brain_pending_tasks",
+          "column_name": "due_date"
+        },
+        {
+          "table_name": "devices",
+          "column_name": "last_lat"
+        },
+        {
+          "table_name": "geocoding_cache",
+          "column_name": "lat_input"
+        },
+        {
+          "table_name": "geocoding_cache",
+          "column_name": "lng_input"
+        },
+        {
+          "table_name": "devices",
+          "column_name": "last_lng"
+        },
+        {
+          "table_name": "geocoding_cache",
+          "column_name": "result"
+        },
+        {
+          "table_name": "brain_projects",
+          "column_name": "progress"
+        },
+        {
+          "table_name": "geocoding_cache",
+          "column_name": "lat"
+        },
+        {
+          "table_name": "geocoding_cache",
+          "column_name": "lng"
+        },
+        {
+          "table_name": "brain_projects",
+          "column_name": "target_date"
+        },
+        {
+          "table_name": "geocoding_cache",
+          "column_name": "hits"
+        },
+        {
+          "table_name": "geocoding_cache",
+          "column_name": "expires_at"
+        },
+        {
+          "table_name": "geocoding_cache",
+          "column_name": "created_at"
+        },
+        {
+          "table_name": "geofences",
+          "column_name": "id"
+        },
+        {
+          "table_name": "geofences",
+          "column_name": "organization_id"
+        },
+        {
+          "table_name": "geofences",
+          "column_name": "created_by"
+        },
+        {
+          "table_name": "brain_pending_tasks",
+          "column_name": "created_at"
+        },
+        {
+          "table_name": "device_events",
+          "column_name": "id"
+        },
+        {
+          "table_name": "vehicle_status",
+          "column_name": "device_id"
+        },
+        {
+          "table_name": "vehicle_status",
+          "column_name": "last_latitude"
+        },
+        {
+          "table_name": "vehicle_status",
+          "column_name": "last_longitude"
+        },
+        {
+          "table_name": "geofences",
+          "column_name": "geometry"
+        },
+        {
+          "table_name": "vehicle_status",
+          "column_name": "last_speed"
+        },
+        {
+          "table_name": "vehicle_status",
+          "column_name": "ignition"
+        },
+        {
+          "table_name": "geofences",
+          "column_name": "alert_on_enter"
+        },
+        {
+          "table_name": "geofences",
+          "column_name": "alert_on_exit"
+        },
+        {
+          "table_name": "geofences",
+          "column_name": "alert_on_stay"
+        },
+        {
+          "table_name": "geofences",
+          "column_name": "stay_minutes"
+        },
+        {
+          "table_name": "geofences",
+          "column_name": "vehicle_ids"
+        },
+        {
+          "table_name": "vehicle_status",
+          "column_name": "is_online"
+        },
+        {
+          "table_name": "geofences",
+          "column_name": "schedule"
+        },
+        {
+          "table_name": "geofences",
+          "column_name": "is_active"
+        },
+        {
+          "table_name": "geofences",
+          "column_name": "created_at"
+        },
+        {
+          "table_name": "geofences",
+          "column_name": "updated_at"
+        },
+        {
+          "table_name": "places",
+          "column_name": "id"
+        },
+        {
+          "table_name": "places",
+          "column_name": "organization_id"
+        },
+        {
+          "table_name": "places",
+          "column_name": "created_by"
+        },
+        {
+          "table_name": "vehicle_status",
+          "column_name": "last_update"
+        },
+        {
+          "table_name": "vehicle_status",
+          "column_name": "updated_at"
+        },
+        {
+          "table_name": "plans",
+          "column_name": "id"
+        },
+        {
+          "table_name": "brain_projects",
+          "column_name": "milestones"
+        },
+        {
+          "table_name": "geofences",
+          "column_name": "description"
+        },
+        {
+          "table_name": "device_events",
+          "column_name": "event_type"
+        },
+        {
+          "table_name": "devices",
+          "column_name": "imei"
+        },
+        {
+          "table_name": "devices",
+          "column_name": "serial_number"
+        },
+        {
+          "table_name": "devices",
+          "column_name": "device_type"
+        },
+        {
+          "table_name": "devices",
+          "column_name": "brand"
+        },
+        {
+          "table_name": "devices",
+          "column_name": "model"
+        },
+        {
+          "table_name": "devices",
+          "column_name": "firmware_version"
+        },
+        {
+          "table_name": "devices",
+          "column_name": "sim_iccid"
+        },
+        {
+          "table_name": "devices",
+          "column_name": "sim_phone"
+        },
+        {
+          "table_name": "devices",
+          "column_name": "sim_carrier"
+        },
+        {
+          "table_name": "devices",
+          "column_name": "install_notes"
+        },
+        {
+          "table_name": "devices",
+          "column_name": "relay_status"
+        },
+        {
+          "table_name": "devices",
+          "column_name": "status"
+        },
+        {
+          "table_name": "brain_items",
+          "column_name": "item_type"
+        },
+        {
+          "table_name": "brain_items",
+          "column_name": "title"
+        },
+        {
+          "table_name": "brain_items",
+          "column_name": "summary"
+        },
+        {
+          "table_name": "brain_items",
+          "column_name": "area"
+        },
+        {
+          "table_name": "brain_items",
+          "column_name": "priority"
+        },
+        {
+          "table_name": "brain_items",
+          "column_name": "tags"
+        },
+        {
+          "table_name": "brain_items",
+          "column_name": "status"
+        },
+        {
+          "table_name": "brain_items",
+          "column_name": "domain"
+        },
+        {
+          "table_name": "brain_tasks",
+          "column_name": "description"
+        },
+        {
+          "table_name": "brain_tasks",
+          "column_name": "effort"
+        },
+        {
+          "table_name": "brain_tasks",
+          "column_name": "context"
+        },
+        {
+          "table_name": "brain_projects",
+          "column_name": "description"
+        },
+        {
+          "table_name": "brain_projects",
+          "column_name": "status"
+        },
+        {
+          "table_name": "brain_habit_logs",
+          "column_name": "notes"
+        },
+        {
+          "table_name": "brain_journal_entries",
+          "column_name": "content"
+        },
+        {
+          "table_name": "brain_journal_entries",
+          "column_name": "entry_type"
+        },
+        {
+          "table_name": "brain_financial_transactions",
+          "column_name": "transaction_type"
+        },
+        {
+          "table_name": "brain_financial_transactions",
+          "column_name": "currency"
+        },
+        {
+          "table_name": "brain_financial_transactions",
+          "column_name": "category"
+        },
+        {
+          "table_name": "brain_financial_transactions",
+          "column_name": "description"
+        },
+        {
+          "table_name": "brain_financial_transactions",
+          "column_name": "merchant"
+        },
+        {
+          "table_name": "brain_financial_transactions",
+          "column_name": "payment_method"
+        },
+        {
+          "table_name": "brain_decisions",
+          "column_name": "context"
+        },
+        {
+          "table_name": "brain_decisions",
+          "column_name": "chosen_option"
+        },
+        {
+          "table_name": "brain_decisions",
+          "column_name": "reasoning"
+        },
+        {
+          "table_name": "brain_decisions",
+          "column_name": "expected_outcome"
+        },
+        {
+          "table_name": "brain_decisions",
+          "column_name": "actual_outcome"
+        },
+        {
+          "table_name": "brain_decisions",
+          "column_name": "lessons"
+        },
+        {
+          "table_name": "brain_today_habits",
+          "column_name": "title"
+        },
+        {
+          "table_name": "brain_today_habits",
+          "column_name": "frequency"
+        },
+        {
+          "table_name": "brain_today_habits",
+          "column_name": "target_unit"
+        },
+        {
+          "table_name": "brain_today_habits",
+          "column_name": "time_of_day"
+        },
+        {
+          "table_name": "brain_today_habits",
+          "column_name": "today_notes"
+        },
+        {
+          "table_name": "brain_monthly_finances",
+          "column_name": "transaction_type"
+        },
+        {
+          "table_name": "brain_monthly_finances",
+          "column_name": "category"
+        },
+        {
+          "table_name": "brain_timeline",
+          "column_name": "item_type"
+        },
+        {
+          "table_name": "brain_timeline",
+          "column_name": "domain"
+        },
+        {
+          "table_name": "brain_timeline",
+          "column_name": "title"
+        },
+        {
+          "table_name": "brain_timeline",
+          "column_name": "area"
+        },
+        {
+          "table_name": "brain_timeline",
+          "column_name": "priority"
+        },
+        {
+          "table_name": "brain_timeline",
+          "column_name": "tags"
+        },
+        {
+          "table_name": "brain_timeline",
+          "column_name": "status"
+        },
+        {
+          "table_name": "brain_pending_tasks",
+          "column_name": "title"
+        },
+        {
+          "table_name": "brain_pending_tasks",
+          "column_name": "domain"
+        },
+        {
+          "table_name": "brain_pending_tasks",
+          "column_name": "area"
+        },
+        {
+          "table_name": "brain_pending_tasks",
+          "column_name": "priority"
+        },
+        {
+          "table_name": "brain_pending_tasks",
+          "column_name": "tags"
+        },
+        {
+          "table_name": "brain_pending_tasks",
+          "column_name": "effort"
+        },
+        {
+          "table_name": "brain_pending_tasks",
+          "column_name": "context"
+        },
+        {
+          "table_name": "brain_pending_tasks",
+          "column_name": "project_name"
+        },
+        {
+          "table_name": "plans",
+          "column_name": "slug"
+        },
+        {
+          "table_name": "plans",
+          "column_name": "name"
+        },
+        {
+          "table_name": "plans",
+          "column_name": "description"
+        },
+        {
+          "table_name": "plans",
+          "column_name": "tagline"
+        },
+        {
+          "table_name": "plans",
+          "column_name": "device_type"
+        },
+        {
+          "table_name": "plans",
+          "column_name": "device_model"
+        },
+        {
+          "table_name": "plans",
+          "column_name": "badge_text"
+        },
+        {
+          "table_name": "plans",
+          "column_name": "badge_color"
+        },
+        {
+          "table_name": "plan_prices",
+          "column_name": "currency"
+        },
+        {
+          "table_name": "countries",
+          "column_name": "code"
+        },
+        {
+          "table_name": "countries",
+          "column_name": "name"
+        },
+        {
+          "table_name": "countries",
+          "column_name": "currency_code"
+        },
+        {
+          "table_name": "countries",
+          "column_name": "currency_symbol"
+        },
+        {
+          "table_name": "countries",
+          "column_name": "timezone"
+        },
+        {
+          "table_name": "countries",
+          "column_name": "locale"
+        },
+        {
+          "table_name": "countries",
+          "column_name": "tax_name"
+        },
+        {
+          "table_name": "countries",
+          "column_name": "phone_prefix"
+        },
+        {
+          "table_name": "organizations",
+          "column_name": "name"
+        },
+        {
+          "table_name": "organizations",
+          "column_name": "slug"
+        },
+        {
+          "table_name": "organizations",
+          "column_name": "legal_name"
+        },
+        {
+          "table_name": "organizations",
+          "column_name": "tax_id"
+        },
+        {
+          "table_name": "organizations",
+          "column_name": "email"
+        },
+        {
+          "table_name": "organizations",
+          "column_name": "phone"
+        },
+        {
+          "table_name": "organizations",
+          "column_name": "website"
+        },
+        {
+          "table_name": "organizations",
+          "column_name": "subscription_status"
+        },
+        {
+          "table_name": "organizations",
+          "column_name": "status"
+        },
+        {
+          "table_name": "organizations",
+          "column_name": "suspended_reason"
+        },
+        {
+          "table_name": "users",
+          "column_name": "email"
+        },
+        {
+          "table_name": "users",
+          "column_name": "password_hash"
+        },
+        {
+          "table_name": "users",
+          "column_name": "google_id"
+        },
+        {
+          "table_name": "users",
+          "column_name": "phone"
+        },
+        {
+          "table_name": "users",
+          "column_name": "name"
+        },
+        {
+          "table_name": "users",
+          "column_name": "avatar_url"
+        },
+        {
+          "table_name": "users",
+          "column_name": "role"
+        },
+        {
+          "table_name": "users",
+          "column_name": "status"
+        },
+        {
+          "table_name": "users",
+          "column_name": "invite_token"
+        },
+        {
+          "table_name": "installers",
+          "column_name": "name"
+        },
+        {
+          "table_name": "installers",
+          "column_name": "email"
+        },
+        {
+          "table_name": "installers",
+          "column_name": "phone"
+        },
+        {
+          "table_name": "installers",
+          "column_name": "avatar_url"
+        },
+        {
+          "table_name": "installers",
+          "column_name": "rut"
+        },
+        {
+          "table_name": "installers",
+          "column_name": "company_name"
+        },
+        {
+          "table_name": "installers",
+          "column_name": "commission_type"
+        },
+        {
+          "table_name": "installers",
+          "column_name": "password_hash"
+        },
+        {
+          "table_name": "installers",
+          "column_name": "status"
+        },
+        {
+          "table_name": "vehicles",
+          "column_name": "name"
+        },
+        {
+          "table_name": "vehicles",
+          "column_name": "plate"
+        },
+        {
+          "table_name": "vehicles",
+          "column_name": "vin"
+        },
+        {
+          "table_name": "vehicles",
+          "column_name": "type"
+        },
+        {
+          "table_name": "vehicles",
+          "column_name": "brand"
+        },
+        {
+          "table_name": "vehicles",
+          "column_name": "model"
+        },
+        {
+          "table_name": "vehicles",
+          "column_name": "color"
+        },
+        {
+          "table_name": "vehicles",
+          "column_name": "fuel_type"
+        },
+        {
+          "table_name": "vehicles",
+          "column_name": "photo_url"
+        },
+        {
+          "table_name": "vehicles",
+          "column_name": "current_status"
+        },
+        {
+          "table_name": "vehicles",
+          "column_name": "status"
+        },
+        {
+          "table_name": "brain_habits",
+          "column_name": "description"
+        },
+        {
+          "table_name": "brain_habits",
+          "column_name": "frequency"
+        },
+        {
+          "table_name": "brain_habits",
+          "column_name": "target_unit"
+        },
+        {
+          "table_name": "brain_habits",
+          "column_name": "time_of_day"
+        },
+        {
+          "table_name": "vehicle_documents",
+          "column_name": "type"
+        },
+        {
+          "table_name": "vehicle_documents",
+          "column_name": "status"
+        },
+        {
+          "table_name": "vehicle_documents",
+          "column_name": "file_url"
+        },
+        {
+          "table_name": "brain_inbox",
+          "column_name": "source"
+        },
+        {
+          "table_name": "brain_inbox",
+          "column_name": "raw_text"
+        },
+        {
+          "table_name": "brain_inbox",
+          "column_name": "status"
+        },
+        {
+          "table_name": "brain_inbox",
+          "column_name": "error_message"
+        },
+        {
+          "table_name": "vehicle_weekly_stats",
+          "column_name": "vehicle_id"
+        },
+        {
+          "table_name": "leads",
+          "column_name": "email"
+        },
+        {
+          "table_name": "brain_chat_history",
+          "column_name": "role"
+        },
+        {
+          "table_name": "brain_chat_history",
+          "column_name": "content"
+        },
+        {
+          "table_name": "brain_chat_history",
+          "column_name": "context"
+        },
+        {
+          "table_name": "brain_focus",
+          "column_name": "text"
+        },
+        {
+          "table_name": "_prisma_migrations",
+          "column_name": "id"
+        },
+        {
+          "table_name": "_prisma_migrations",
+          "column_name": "checksum"
+        },
+        {
+          "table_name": "_prisma_migrations",
+          "column_name": "migration_name"
+        },
+        {
+          "table_name": "_prisma_migrations",
+          "column_name": "logs"
+        },
+        {
+          "table_name": "geocoding_cache",
+          "column_name": "cache_key"
+        },
+        {
+          "table_name": "geocoding_cache",
+          "column_name": "query_type"
+        },
+        {
+          "table_name": "geocoding_cache",
+          "column_name": "address_input"
+        },
+        {
+          "table_name": "geocoding_cache",
+          "column_name": "formatted_address"
+        },
+        {
+          "table_name": "geocoding_cache",
+          "column_name": "place_id"
+        },
+        {
+          "table_name": "geofences",
+          "column_name": "name"
+        },
+        {
+          "table_name": "geofences",
+          "column_name": "color"
+        },
+        {
+          "table_name": "geofences",
+          "column_name": "icon"
+        },
+        {
+          "table_name": "geofences",
+          "column_name": "type"
+        },
+        {
+          "table_name": "geofences",
+          "column_name": "google_place_id"
+        },
+        {
+          "table_name": "geofences",
+          "column_name": "place_name"
+        },
+        {
+          "table_name": "geofences",
+          "column_name": "schedule_type"
+        },
+        {
+          "table_name": "places",
+          "column_name": "name"
+        },
+        {
+          "table_name": "places",
+          "column_name": "category"
+        },
+        {
+          "table_name": "places",
+          "column_name": "google_place_id"
+        },
+        {
+          "table_name": "places",
+          "column_name": "formatted_address"
+        },
+        {
+          "table_name": "alerts",
+          "column_name": "type"
+        },
+        {
+          "table_name": "alerts",
+          "column_name": "severity"
+        },
+        {
+          "table_name": "alerts",
+          "column_name": "address"
+        },
+        {
+          "table_name": "trips",
+          "column_name": "google_polyline"
+        },
+        {
+          "table_name": "trips",
+          "column_name": "avg_traffic_level"
+        },
+        {
+          "table_name": "trips",
+          "column_name": "status"
+        },
+        {
+          "table_name": "planned_routes",
+          "column_name": "origin_address"
+        },
+        {
+          "table_name": "planned_routes",
+          "column_name": "origin_place_id"
+        },
+        {
+          "table_name": "planned_routes",
+          "column_name": "dest_address"
+        },
+        {
+          "table_name": "planned_routes",
+          "column_name": "dest_place_id"
+        },
+        {
+          "table_name": "planned_routes",
+          "column_name": "traffic_level"
+        },
+        {
+          "table_name": "planned_routes",
+          "column_name": "status"
+        },
+        {
+          "table_name": "route_events",
+          "column_name": "type"
+        },
+        {
+          "table_name": "route_events",
+          "column_name": "address"
+        },
+        {
+          "table_name": "subscriptions",
+          "column_name": "status"
+        },
+        {
+          "table_name": "subscriptions",
+          "column_name": "payment_provider"
+        },
+        {
+          "table_name": "subscriptions",
+          "column_name": "external_id"
+        },
+        {
+          "table_name": "subscriptions",
+          "column_name": "currency"
+        },
+        {
+          "table_name": "subscriptions",
+          "column_name": "billing_cycle"
+        },
+        {
+          "table_name": "subscriptions",
+          "column_name": "discount_code"
+        },
+        {
+          "table_name": "payments",
+          "column_name": "currency"
+        },
+        {
+          "table_name": "payments",
+          "column_name": "status"
+        },
+        {
+          "table_name": "payments",
+          "column_name": "payment_method"
+        },
+        {
+          "table_name": "payments",
+          "column_name": "payment_provider"
+        },
+        {
+          "table_name": "payments",
+          "column_name": "external_id"
+        },
+        {
+          "table_name": "payments",
+          "column_name": "failure_reason"
+        },
+        {
+          "table_name": "payments",
+          "column_name": "invoice_url"
+        },
+        {
+          "table_name": "payments",
+          "column_name": "invoice_number"
+        },
+        {
+          "table_name": "installation_jobs",
+          "column_name": "address"
+        },
+        {
+          "table_name": "installation_jobs",
+          "column_name": "contact_name"
+        },
+        {
+          "table_name": "installation_jobs",
+          "column_name": "contact_phone"
+        },
+        {
+          "table_name": "installation_jobs",
+          "column_name": "notes"
+        },
+        {
+          "table_name": "installation_jobs",
+          "column_name": "status"
+        },
+        {
+          "table_name": "installation_jobs",
+          "column_name": "install_notes"
+        },
+        {
+          "table_name": "installation_jobs",
+          "column_name": "review"
+        },
+        {
+          "table_name": "audit_logs",
+          "column_name": "action"
+        },
+        {
+          "table_name": "audit_logs",
+          "column_name": "resource_type"
+        },
+        {
+          "table_name": "audit_logs",
+          "column_name": "ip_address"
+        },
+        {
+          "table_name": "audit_logs",
+          "column_name": "user_agent"
+        },
+        {
+          "table_name": "platform_admins",
+          "column_name": "email"
+        },
+        {
+          "table_name": "platform_admins",
+          "column_name": "password_hash"
+        },
+        {
+          "table_name": "platform_admins",
+          "column_name": "name"
+        },
+        {
+          "table_name": "platform_admins",
+          "column_name": "avatar_url"
+        },
+        {
+          "table_name": "platform_admins",
+          "column_name": "role"
+        },
+        {
+          "table_name": "maintenance_records",
+          "column_name": "type"
+        },
+        {
+          "table_name": "maintenance_records",
+          "column_name": "title"
+        },
+        {
+          "table_name": "maintenance_records",
+          "column_name": "notes"
+        },
+        {
+          "table_name": "maintenance_records",
+          "column_name": "invoice_url"
+        },
+        {
+          "table_name": "maintenance_records",
+          "column_name": "status"
+        },
+        {
+          "table_name": "notifications",
+          "column_name": "type"
+        },
+        {
+          "table_name": "notifications",
+          "column_name": "title"
+        },
+        {
+          "table_name": "notifications",
+          "column_name": "body"
+        },
+        {
+          "table_name": "notifications",
+          "column_name": "channel"
+        },
+        {
+          "table_name": "notifications",
+          "column_name": "status"
+        }
+      ]
+    }
+  ]

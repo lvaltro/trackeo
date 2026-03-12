@@ -1,0 +1,786 @@
+// ============================================================
+// TRACKEO - Prisma Schema
+// Archivo: prisma/schema.prisma
+// ============================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+// ============================================================
+// PLATAFORMA
+// ============================================================
+
+model Country {
+  id             String    @id @default(uuid()) @db.Uuid
+  code           String    @unique @db.Char(2)
+  name           String    @db.VarChar(100)
+  currencyCode   String    @map("currency_code") @db.Char(3)
+  currencySymbol String    @map("currency_symbol") @db.VarChar(5)
+  timezone       String    @db.VarChar(50)
+  locale         String    @db.VarChar(10)
+  taxRate        Decimal   @default(0) @map("tax_rate") @db.Decimal(5, 2)
+  taxName        String    @default("IVA") @map("tax_name") @db.VarChar(20)
+  phonePrefix    String?   @map("phone_prefix") @db.VarChar(5)
+  isActive       Boolean   @default(false) @map("is_active")
+  launchedAt     DateTime? @map("launched_at")
+  createdAt      DateTime  @default(now()) @map("created_at")
+
+  organizations Organization[]
+  planPrices    PlanPrice[]
+  subscriptions Subscription[]
+  payments      Payment[]
+  installers    Installer[]
+
+  @@map("countries")
+}
+
+model Plan {
+  id               String   @id @default(uuid()) @db.Uuid
+  slug             String   @unique @db.VarChar(50)
+  name             String   @db.VarChar(100)
+  description      String?  @db.Text
+  tagline          String?  @db.VarChar(255)
+  deviceType       String?  @map("device_type") @db.VarChar(20)
+  deviceModel      String?  @map("device_model") @db.VarChar(100)
+  priceUsdMonthly  Decimal  @map("price_usd_monthly") @db.Decimal(10, 2)
+  priceUsdYearly   Decimal? @map("price_usd_yearly") @db.Decimal(10, 2)
+  maxVehicles      Int      @default(1) @map("max_vehicles")
+  maxUsers         Int      @default(1) @map("max_users")
+  maxGeofences     Int      @default(3) @map("max_geofences")
+  maxAlerts        Int      @default(5) @map("max_alerts")
+  historyDays      Int      @default(30) @map("history_days")
+  maxPlannedRoutes Int      @default(10) @map("max_planned_routes")
+  features         Json     @default("{}")
+  isActive         Boolean  @default(true) @map("is_active")
+  isPublic         Boolean  @default(true) @map("is_public")
+  isFeatured       Boolean  @default(false) @map("is_featured")
+  sortOrder        Int      @default(0) @map("sort_order")
+  badgeText        String?  @map("badge_text") @db.VarChar(50)
+  badgeColor       String?  @map("badge_color") @db.VarChar(20)
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+
+  organizations Organization[]
+  planPrices    PlanPrice[]
+  subscriptions Subscription[]
+
+  @@map("plans")
+}
+
+model PlanPrice {
+  id           String   @id @default(uuid()) @db.Uuid
+  planId       String   @map("plan_id") @db.Uuid
+  countryId    String   @map("country_id") @db.Uuid
+  priceMonthly Decimal  @map("price_monthly") @db.Decimal(12, 2)
+  priceYearly  Decimal? @map("price_yearly") @db.Decimal(12, 2)
+  currency     String   @db.Char(3)
+  isActive     Boolean  @default(true) @map("is_active")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  plan    Plan    @relation(fields: [planId], references: [id], onDelete: Cascade)
+  country Country @relation(fields: [countryId], references: [id])
+
+  @@unique([planId, countryId])
+  @@map("plan_prices")
+}
+
+model PlatformAdmin {
+  id           String    @id @default(uuid()) @db.Uuid
+  email        String    @unique @db.VarChar(255)
+  passwordHash String    @map("password_hash") @db.VarChar(255)
+  name         String    @db.VarChar(100)
+  avatarUrl    String?   @map("avatar_url") @db.VarChar(500)
+  role         String    @default("platform_admin") @db.VarChar(30)
+  permissions  Json      @default("{}")
+  lastLogin    DateTime? @map("last_login")
+  isActive     Boolean   @default(true) @map("is_active")
+  createdAt    DateTime  @default(now()) @map("created_at")
+
+  auditLogs AuditLog[]
+
+  @@map("platform_admins")
+}
+
+// ============================================================
+// ORGANIZACIONES Y USUARIOS
+// ============================================================
+
+model Organization {
+  id                  String    @id @default(uuid()) @db.Uuid
+  countryId           String    @map("country_id") @db.Uuid
+  planId              String    @map("plan_id") @db.Uuid
+  name                String    @db.VarChar(255)
+  slug                String    @unique @db.VarChar(100)
+  legalName           String?   @map("legal_name") @db.VarChar(255)
+  taxId               String?   @map("tax_id") @db.VarChar(50)
+  email               String    @db.VarChar(255)
+  phone               String?   @db.VarChar(50)
+  website             String?   @db.VarChar(255)
+  address             Json      @default("{}")
+  subscriptionStatus  String    @default("trial") @map("subscription_status") @db.VarChar(20)
+  trialEndsAt         DateTime  @default(dbgenerated("NOW() + INTERVAL '14 days'")) @map("trial_ends_at")
+  planExpiresAt       DateTime? @map("plan_expires_at")
+  settings            Json      @default("{}")
+  onboardingCompleted Boolean   @default(false) @map("onboarding_completed")
+  onboardingSteps     Json      @default("{}") @map("onboarding_steps")
+  status              String    @default("active") @db.VarChar(20)
+  suspendedAt         DateTime? @map("suspended_at")
+  suspendedReason     String?   @map("suspended_reason")
+  deletedAt           DateTime? @map("deleted_at")
+  createdAt           DateTime  @default(now()) @map("created_at")
+  updatedAt           DateTime  @updatedAt @map("updated_at")
+
+  country       Country             @relation(fields: [countryId], references: [id])
+  plan          Plan                @relation(fields: [planId], references: [id])
+  users         User[]
+  vehicles      Vehicle[]
+  geofences     Geofence[]
+  places        Place[]
+  alerts        Alert[]
+  plannedRoutes PlannedRoute[]
+  subscriptions Subscription[]
+  payments      Payment[]
+  auditLogs     AuditLog[]
+  savings       SavingsStat[]
+  trips         Trip[]
+
+  @@index([countryId])
+  @@index([planId])
+  @@index([status])
+  @@map("organizations")
+}
+
+model User {
+  id             String    @id @default(uuid()) @db.Uuid
+  organizationId String    @map("organization_id") @db.Uuid
+  email          String    @db.VarChar(255)
+  passwordHash   String?   @map("password_hash") @db.VarChar(255)
+  googleId       String?   @map("google_id") @db.VarChar(255)
+  phone          String?   @db.VarChar(50)
+  name           String    @db.VarChar(100)
+  avatarUrl      String?   @map("avatar_url") @db.VarChar(500)
+  role           String    @default("viewer") @db.VarChar(30)
+  permissions    Json      @default("{}")
+  preferences    Json      @default("{}")
+  status         String    @default("active") @db.VarChar(20)
+  emailVerified  Boolean   @default(false) @map("email_verified")
+  invitedBy      String?   @map("invited_by") @db.Uuid
+  inviteToken    String?   @map("invite_token") @db.VarChar(100)
+  inviteExpires  DateTime? @map("invite_expires")
+  lastLogin      DateTime? @map("last_login")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+
+  organization         Organization        @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  inviter              User?               @relation("UserInvites", fields: [invitedBy], references: [id])
+  invitees             User[]              @relation("UserInvites")
+  vehicleDrivers       VehicleDriver[]
+  createdGeofences     Geofence[]
+  createdPlaces        Place[]
+  createdRoutes        PlannedRoute[]      @relation("RouteCreator")
+  driverRoutes         PlannedRoute[]      @relation("RouteDriver")
+  trips                Trip[]
+  resolvedAlerts       Alert[]             @relation("AlertResolver")
+  readAlerts           Alert[]             @relation("AlertReader")
+  auditLogs            AuditLog[]
+
+  @@unique([email, organizationId])
+  @@index([organizationId])
+  @@index([email])
+  @@map("users")
+}
+
+// ============================================================
+// DISPOSITIVOS Y VEHÍCULOS
+// ============================================================
+
+model Installer {
+  id               String    @id @default(uuid()) @db.Uuid
+  countryId        String    @map("country_id") @db.Uuid
+  name             String    @db.VarChar(255)
+  email            String    @unique @db.VarChar(255)
+  phone            String    @db.VarChar(50)
+  avatarUrl        String?   @map("avatar_url") @db.VarChar(500)
+  rut              String?   @db.VarChar(20)
+  companyName      String?   @map("company_name") @db.VarChar(255)
+  companyAddress   Json      @default("{}") @map("company_address")
+  coverageZones    Json      @default("[]") @map("coverage_zones")
+  certifiedDevices Json      @default("[]") @map("certified_devices")
+  totalInstalls    Int       @default(0) @map("total_installs")
+  activeDevices    Int       @default(0) @map("active_devices")
+  avgRating        Decimal   @default(0) @map("avg_rating") @db.Decimal(3, 2)
+  commissionRate   Decimal   @default(0) @map("commission_rate") @db.Decimal(5, 2)
+  commissionType   String    @default("percent") @map("commission_type") @db.VarChar(20)
+  paymentInfo      Json      @default("{}") @map("payment_info")
+  passwordHash     String?   @map("password_hash") @db.VarChar(255)
+  status           String    @default("active") @db.VarChar(20)
+  isVerified       Boolean   @default(false) @map("is_verified")
+  certifiedAt      DateTime? @map("certified_at")
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime  @updatedAt @map("updated_at")
+
+  country          Country           @relation(fields: [countryId], references: [id])
+  installedDevices Device[]          @relation("InstallerDevices")
+  assignedDevices  Device[]          @relation("AssignedInstaller")
+  installationJobs InstallationJob[]
+
+  @@index([countryId])
+  @@map("installers")
+}
+
+model Device {
+  id              String    @id @default(uuid()) @db.Uuid
+  organizationId  String?   @map("organization_id") @db.Uuid
+  installerId     String?   @map("installer_id") @db.Uuid
+  imei            String    @unique @db.VarChar(20)
+  serialNumber    String?   @map("serial_number") @db.VarChar(100)
+  deviceType      String    @map("device_type") @db.VarChar(20)
+  brand           String?   @db.VarChar(50)
+  model           String?   @db.VarChar(100)
+  firmwareVersion String?   @map("firmware_version") @db.VarChar(50)
+  simIccid        String?   @map("sim_iccid") @db.VarChar(25)
+  simPhone        String?   @map("sim_phone") @db.VarChar(50)
+  simCarrier      String?   @map("sim_carrier") @db.VarChar(50)
+  installedAt     DateTime? @map("installed_at")
+  installedBy     String?   @map("installed_by") @db.Uuid
+  installPhotos   Json      @default("[]") @map("install_photos")
+  installNotes    String?   @map("install_notes") @db.Text
+  config          Json      @default("{}")
+  lastSeen        DateTime? @map("last_seen")
+  lastLat         Decimal?  @map("last_lat") @db.Decimal(10, 7)
+  lastLng         Decimal?  @map("last_lng") @db.Decimal(10, 7)
+  batteryLevel    Int?      @map("battery_level")
+  signalStrength  Int?      @map("signal_strength")
+  isOnline        Boolean   @default(false) @map("is_online")
+  relayStatus     String?   @map("relay_status") @db.VarChar(20)
+  status          String    @default("stock") @db.VarChar(20)
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+
+  installer        Installer?        @relation("AssignedInstaller", fields: [installerId], references: [id])
+  installedByUser  Installer?        @relation("InstallerDevices", fields: [installedBy], references: [id])
+  vehicle          Vehicle?
+  installationJobs InstallationJob[]
+
+  @@index([imei])
+  @@index([organizationId])
+  @@index([deviceType])
+  @@map("devices")
+}
+
+model Vehicle {
+  id              String    @id @default(uuid()) @db.Uuid
+  organizationId  String    @map("organization_id") @db.Uuid
+  deviceId        String?   @unique @map("device_id") @db.Uuid
+  name            String    @db.VarChar(100)
+  plate           String?   @db.VarChar(20)
+  vin             String?   @db.VarChar(20)
+  type            String    @default("car") @db.VarChar(30)
+  brand           String?   @db.VarChar(50)
+  model           String?   @db.VarChar(50)
+  year            Int?      @db.SmallInt
+  color           String?   @db.VarChar(50)
+  fuelType        String    @default("Diesel") @map("fuel_type") @db.VarChar(20)
+  fuelEfficiency  Float     @default(10.0) @map("fuel_efficiency") @db.Real
+  photoUrl        String?   @map("photo_url") @db.VarChar(500)
+  primaryDriverId String?   @map("primary_driver_id") @db.Uuid
+  currentStatus   String    @default("unknown") @map("current_status") @db.VarChar(20)
+  currentLocation Json      @default("{}") @map("current_location")
+  odometerKm      Decimal   @default(0) @map("odometer_km") @db.Decimal(10, 2)
+  odometerUpdated DateTime? @map("odometer_updated")
+  obdData         Json      @default("{}") @map("obd_data")
+  alertConfig     Json      @default("{}") @map("alert_config")
+  status          String    @default("active") @db.VarChar(20)
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+
+  organization  Organization        @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  device        Device?             @relation(fields: [deviceId], references: [id])
+  drivers       VehicleDriver[]
+  trips         Trip[]
+  alerts        Alert[]
+  geofences     Geofence[]          @relation("VehicleGeofences")
+  plannedRoutes PlannedRoute[]
+  routeEvents   RouteEvent[]
+
+  @@index([organizationId])
+  @@index([status])
+  @@map("vehicles")
+}
+
+model VehicleDriver {
+  vehicleId  String   @map("vehicle_id") @db.Uuid
+  userId     String   @map("user_id") @db.Uuid
+  assignedAt DateTime @default(now()) @map("assigned_at")
+  assignedBy String?  @map("assigned_by") @db.Uuid
+
+  vehicle Vehicle @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([vehicleId, userId])
+  @@map("vehicle_drivers")
+}
+
+// Nota: vehicleId almacena el device_id de Traccar (TEXT). Sin FK a vehicles.
+// Desplegada con migración standalone 20260303000001_vehicle_documents.
+model VehicleDocument {
+  id           String    @id @default(uuid()) @db.Uuid
+  vehicleId    String    @map("vehicle_id") @db.Text
+  type         String    @db.VarChar(50)
+  title        String    @db.VarChar(255)
+  issueDate    DateTime? @map("issue_date") @db.Date
+  expiresAt    DateTime  @map("expires_at") @db.Date
+  notes        String?   @db.Text
+  reminderDays Int[]     @map("reminder_days")
+  fileUrl      String?   @map("file_url") @db.VarChar(500)
+  status       String    @default("ok") @db.VarChar(20)
+  metadata     Json      @default("{}")
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+
+  @@index([vehicleId])
+  @@index([expiresAt])
+  @@index([status])
+  @@map("vehicle_documents")
+}
+
+model SavingsStat {
+  id               String   @id @default(uuid()) @db.Uuid
+  organizationId   String   @map("organization_id") @db.Uuid
+  month            DateTime @db.Date
+  fuelSaved        Float    @map("fuel_saved") @db.Real
+  maintenanceSaved Float    @map("maintenance_saved") @db.Real
+  totalSaved       Float    @map("total_saved") @db.Real
+  createdAt        DateTime @default(now()) @map("created_at")
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, month])
+  @@index([organizationId])
+  @@map("savings_stats")
+}
+
+// ============================================================
+// FEATURES PRINCIPALES
+// ============================================================
+
+model Geofence {
+  id             String   @id @default(uuid()) @db.Uuid
+  organizationId String   @map("organization_id") @db.Uuid
+  createdBy      String?  @map("created_by") @db.Uuid
+  name           String   @db.VarChar(255)
+  description    String?  @db.Text
+  color          String   @default("#f97316") @db.VarChar(7)
+  icon           String   @default("map-pin") @db.VarChar(50)
+  type           String   @db.VarChar(20)
+  geometry       Json
+  googlePlaceId  String?  @map("google_place_id") @db.VarChar(255)
+  placeName      String?  @map("place_name") @db.VarChar(255)
+  alertOnEnter   Boolean  @default(true) @map("alert_on_enter")
+  alertOnExit    Boolean  @default(true) @map("alert_on_exit")
+  alertOnStay    Boolean  @default(false) @map("alert_on_stay")
+  stayMinutes    Int?     @map("stay_minutes")
+  vehicleIds     Json     @default("[]") @map("vehicle_ids")
+  scheduleType   String   @default("always") @map("schedule_type") @db.VarChar(20)
+  schedule       Json     @default("{}")
+  isActive       Boolean  @default(true) @map("is_active")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  creator      User?        @relation(fields: [createdBy], references: [id])
+  alerts       Alert[]
+  vehicles     Vehicle[]    @relation("VehicleGeofences")
+  places       Place[]
+
+  @@index([organizationId])
+  @@map("geofences")
+}
+
+model Place {
+  id               String    @id @default(uuid()) @db.Uuid
+  organizationId   String    @map("organization_id") @db.Uuid
+  createdBy        String?   @map("created_by") @db.Uuid
+  name             String    @db.VarChar(255)
+  category         String    @default("custom") @db.VarChar(50)
+  googlePlaceId    String?   @map("google_place_id") @db.VarChar(255)
+  formattedAddress String?   @map("formatted_address") @db.VarChar(500)
+  lat              Decimal   @db.Decimal(10, 7)
+  lng              Decimal   @db.Decimal(10, 7)
+  autoGeofence     Boolean   @default(false) @map("auto_geofence")
+  geofenceRadius   Int       @default(200) @map("geofence_radius")
+  geofenceId       String?   @map("geofence_id") @db.Uuid
+  visitCount       Int       @default(0) @map("visit_count")
+  lastVisited      DateTime? @map("last_visited")
+  isActive         Boolean   @default(true) @map("is_active")
+  createdAt        DateTime  @default(now()) @map("created_at")
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  creator      User?        @relation(fields: [createdBy], references: [id])
+  geofence     Geofence?    @relation(fields: [geofenceId], references: [id])
+
+  @@map("places")
+}
+
+model Alert {
+  id             String    @id @default(uuid()) @db.Uuid
+  organizationId String    @map("organization_id") @db.Uuid
+  vehicleId      String    @map("vehicle_id") @db.Uuid
+  geofenceId     String?   @map("geofence_id") @db.Uuid
+  tripId         String?   @map("trip_id") @db.Uuid
+  type           String    @db.VarChar(50)
+  severity       String    @default("info") @db.VarChar(20)
+  data           Json      @default("{}")
+  lat            Decimal?  @db.Decimal(10, 7)
+  lng            Decimal?  @db.Decimal(10, 7)
+  address        String?   @db.VarChar(500)
+  notifiedAt     DateTime? @map("notified_at")
+  notifiedVia    Json      @default("[]") @map("notified_via")
+  isRead         Boolean   @default(false) @map("is_read")
+  readAt         DateTime? @map("read_at")
+  readBy         String?   @map("read_by") @db.Uuid
+  resolvedAt     DateTime? @map("resolved_at")
+  resolvedBy     String?   @map("resolved_by") @db.Uuid
+  recordedAt     DateTime  @map("recorded_at")
+  createdAt      DateTime  @default(now()) @map("created_at")
+
+  organization  Organization   @relation(fields: [organizationId], references: [id])
+  vehicle       Vehicle        @relation(fields: [vehicleId], references: [id])
+  geofence      Geofence?      @relation(fields: [geofenceId], references: [id])
+  trip          Trip?          @relation(fields: [tripId], references: [id])
+  reader        User?          @relation("AlertReader", fields: [readBy], references: [id])
+  resolver      User?          @relation("AlertResolver", fields: [resolvedBy], references: [id])
+  @@index([organizationId])
+  @@index([vehicleId])
+  @@index([type])
+  @@index([organizationId, isRead])
+  @@map("alerts")
+}
+
+model Trip {
+  id                 String    @id @default(uuid()) @db.Uuid
+  organizationId     String    @map("organization_id") @db.Uuid
+  vehicleId          String    @map("vehicle_id") @db.Uuid
+  driverId           String?   @map("driver_id") @db.Uuid
+  routeId            String?   @map("route_id") @db.Uuid
+  startedAt          DateTime  @map("started_at")
+  endedAt            DateTime? @map("ended_at")
+  durationSeconds    Int?      @map("duration_seconds")
+  distanceKm         Decimal   @default(0) @map("distance_km") @db.Decimal(10, 3)
+  maxSpeedKmh        Decimal   @default(0) @map("max_speed_kmh") @db.Decimal(6, 2)
+  avgSpeedKmh        Decimal   @default(0) @map("avg_speed_kmh") @db.Decimal(6, 2)
+  idleSeconds        Int       @default(0) @map("idle_seconds")
+  startLocation      Json?     @map("start_location")
+  endLocation        Json?     @map("end_location")
+  googlePolyline     String?   @map("google_polyline") @db.Text
+  optimalDistanceKm  Decimal?  @map("optimal_distance_km") @db.Decimal(10, 3)
+  optimalDurationMin Int?      @map("optimal_duration_min")
+  efficiencyScore    Decimal?  @map("efficiency_score") @db.Decimal(5, 2)
+  excessDistanceKm   Decimal?  @map("excess_distance_km") @db.Decimal(8, 3)
+  excessMinutes      Int?      @map("excess_minutes")
+  behaviorScore      Decimal?  @map("behavior_score") @db.Decimal(5, 2)
+  harshBraking       Int       @default(0) @map("harsh_braking")
+  harshAccel         Int       @default(0) @map("harsh_accel")
+  speedingEvents     Int       @default(0) @map("speeding_events")
+  trafficDelayMin    Int       @default(0) @map("traffic_delay_min")
+  avgTrafficLevel    String?   @map("avg_traffic_level") @db.VarChar(20)
+  fuelUsedLiters     Decimal?  @map("fuel_used_liters") @db.Decimal(6, 3)
+  fuelCost           Decimal?  @map("fuel_cost") @db.Decimal(10, 2)
+  status             String    @default("active") @db.VarChar(20)
+  createdAt          DateTime  @default(now()) @map("created_at")
+
+  organization Organization  @relation(fields: [organizationId], references: [id])
+  vehicle      Vehicle       @relation(fields: [vehicleId], references: [id])
+  driver       User?         @relation(fields: [driverId], references: [id])
+  plannedRoute PlannedRoute? @relation(fields: [routeId], references: [id])
+  alerts       Alert[]
+
+  @@index([organizationId])
+  @@index([vehicleId])
+  @@index([startedAt(sort: Desc)])
+  @@map("trips")
+}
+
+model PlannedRoute {
+  id              String    @id @default(uuid()) @db.Uuid
+  organizationId  String    @map("organization_id") @db.Uuid
+  vehicleId       String    @map("vehicle_id") @db.Uuid
+  createdBy       String    @map("created_by") @db.Uuid
+  driverId        String?   @map("driver_id") @db.Uuid
+  originAddress   String    @map("origin_address") @db.VarChar(500)
+  originPlaceId   String?   @map("origin_place_id") @db.VarChar(255)
+  originLat       Decimal   @map("origin_lat") @db.Decimal(10, 7)
+  originLng       Decimal   @map("origin_lng") @db.Decimal(10, 7)
+  destAddress     String    @map("dest_address") @db.VarChar(500)
+  destPlaceId     String?   @map("dest_place_id") @db.VarChar(255)
+  destLat         Decimal   @map("dest_lat") @db.Decimal(10, 7)
+  destLng         Decimal   @map("dest_lng") @db.Decimal(10, 7)
+  waypoints       Json      @default("[]")
+  googleRoute     Json      @default("{}") @map("google_route")
+  distanceKm      Decimal?  @map("distance_km") @db.Decimal(8, 2)
+  durationMin     Int?      @map("duration_min")
+  durationTraffic Int?      @map("duration_traffic")
+  trafficLevel    String?   @map("traffic_level") @db.VarChar(20)
+  deviationMeters Int       @default(500) @map("deviation_meters")
+  notifyOnArrive  Boolean   @default(true) @map("notify_on_arrive")
+  notifyOnDeviate Boolean   @default(true) @map("notify_on_deviate")
+  notifyContacts  Json      @default("[]") @map("notify_contacts")
+  status          String    @default("planned") @db.VarChar(20)
+  startedAt       DateTime? @map("started_at")
+  completedAt     DateTime? @map("completed_at")
+  actualDuration  Int?      @map("actual_duration")
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+
+  organization Organization @relation(fields: [organizationId], references: [id])
+  vehicle      Vehicle      @relation(fields: [vehicleId], references: [id])
+  creator      User         @relation("RouteCreator", fields: [createdBy], references: [id])
+  driver       User?        @relation("RouteDriver", fields: [driverId], references: [id])
+  trips        Trip[]
+  routeEvents  RouteEvent[]
+
+  @@index([organizationId])
+  @@index([vehicleId])
+  @@index([status])
+  @@map("planned_routes")
+}
+
+model RouteEvent {
+  id         String   @id @default(uuid()) @db.Uuid
+  routeId    String   @map("route_id") @db.Uuid
+  vehicleId  String   @map("vehicle_id") @db.Uuid
+  type       String   @db.VarChar(50)
+  lat        Decimal? @db.Decimal(10, 7)
+  lng        Decimal? @db.Decimal(10, 7)
+  address    String?  @db.VarChar(500)
+  data       Json     @default("{}")
+  recordedAt DateTime @map("recorded_at")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  route   PlannedRoute @relation(fields: [routeId], references: [id])
+  vehicle Vehicle      @relation(fields: [vehicleId], references: [id])
+
+  @@map("route_events")
+}
+
+// Nota: vehicleId almacena el device_id de la tabla devices (el mismo UUID que usa
+// vehicles_status). Sin relaciones Prisma — tabla standalone desplegada con su propia
+// migración (20260303000000_add_maintenance_records).
+model MaintenanceRecord {
+  id            String    @id @default(uuid()) @db.Uuid
+  vehicleId     String    @map("vehicle_id") @db.Uuid
+  type          String    @default("other") @db.VarChar(50)
+  title         String    @db.VarChar(255)
+  notes         String?   @db.Text
+  scheduledDate DateTime? @map("scheduled_date") @db.Date
+  scheduledKm   Decimal?  @map("scheduled_km") @db.Decimal(10, 2)
+  nextServiceKm Decimal?  @map("next_service_km") @db.Decimal(10, 2)
+  completedDate DateTime? @map("completed_date") @db.Date
+  completedKm   Decimal?  @map("completed_km") @db.Decimal(10, 2)
+  completedBy   String?   @map("completed_by") @db.VarChar(255)
+  cost          Decimal?  @db.Decimal(10, 2)
+  invoiceUrl    String?   @map("invoice_url") @db.VarChar(500)
+  status        String    @default("scheduled") @db.VarChar(20)
+  metadata      Json      @default("{}")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  @@index([vehicleId])
+  @@index([status])
+  @@map("maintenance_records")
+}
+
+// Nota: vehicleId almacena el device_id de Traccar (TEXT). Sin FK a vehicles.
+// Desplegada con migración standalone 20260303000003_vehicle_weekly_stats.
+model VehicleWeeklyStat {
+  id               String   @id @default(uuid()) @db.Uuid
+  vehicleId        String   @map("vehicle_id") @db.Text
+  weekStart        DateTime @map("week_start") @db.Date
+  kmTotal          Decimal  @default(0) @map("km_total") @db.Decimal(10, 2)
+  drivingMinutes   Int      @default(0) @map("driving_minutes")
+  tripsCount       Int      @default(0) @map("trips_count")
+  maxSpeedKmh      Decimal  @default(0) @map("max_speed_kmh") @db.Decimal(6, 2)
+  avgSpeedKmh      Decimal  @default(0) @map("avg_speed_kmh") @db.Decimal(6, 2)
+  overspeedCount   Int      @default(0) @map("overspeed_count")
+  harshBrakeCount  Int      @default(0) @map("harsh_brake_count")
+  harshAccelCount  Int      @default(0) @map("harsh_accel_count")
+  score            Int      @default(100)
+  prevScore        Int?     @map("prev_score")
+  prevKm           Decimal? @map("prev_km") @db.Decimal(10, 2)
+  dailyKm          Json     @default("{}") @map("daily_km")
+  calculatedAt     DateTime @default(now()) @map("calculated_at")
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+
+  @@unique([vehicleId, weekStart])
+  @@index([vehicleId])
+  @@index([weekStart(sort: Desc)])
+  @@map("vehicle_weekly_stats")
+}
+
+// ============================================================
+// PAGOS Y SUSCRIPCIONES
+// ============================================================
+
+model Subscription {
+  id                 String    @id @default(uuid()) @db.Uuid
+  organizationId     String    @map("organization_id") @db.Uuid
+  planId             String    @map("plan_id") @db.Uuid
+  countryId          String    @map("country_id") @db.Uuid
+  status             String    @default("trialing") @db.VarChar(20)
+  currentPeriodStart DateTime  @map("current_period_start")
+  currentPeriodEnd   DateTime  @map("current_period_end")
+  cancelAtPeriodEnd  Boolean   @default(false) @map("cancel_at_period_end")
+  cancelledAt        DateTime? @map("cancelled_at")
+  paymentProvider    String?   @map("payment_provider") @db.VarChar(30)
+  externalId         String?   @map("external_id") @db.VarChar(255)
+  amount             Decimal   @db.Decimal(12, 2)
+  currency           String    @db.Char(3)
+  billingCycle       String    @default("monthly") @map("billing_cycle") @db.VarChar(20)
+  discountCode       String?   @map("discount_code") @db.VarChar(50)
+  discountPercent    Decimal   @default(0) @map("discount_percent") @db.Decimal(5, 2)
+  metadata           Json      @default("{}")
+  createdAt          DateTime  @default(now()) @map("created_at")
+  updatedAt          DateTime  @updatedAt @map("updated_at")
+
+  organization Organization @relation(fields: [organizationId], references: [id])
+  plan         Plan         @relation(fields: [planId], references: [id])
+  country      Country      @relation(fields: [countryId], references: [id])
+  payments     Payment[]
+
+  @@map("subscriptions")
+}
+
+model Payment {
+  id              String    @id @default(uuid()) @db.Uuid
+  organizationId  String    @map("organization_id") @db.Uuid
+  subscriptionId  String?   @map("subscription_id") @db.Uuid
+  countryId       String    @map("country_id") @db.Uuid
+  amount          Decimal   @db.Decimal(12, 2)
+  currency        String    @db.Char(3)
+  taxAmount       Decimal   @default(0) @map("tax_amount") @db.Decimal(12, 2)
+  totalAmount     Decimal   @map("total_amount") @db.Decimal(12, 2)
+  status          String    @default("pending") @db.VarChar(20)
+  paymentMethod   String?   @map("payment_method") @db.VarChar(50)
+  paymentProvider String?   @map("payment_provider") @db.VarChar(30)
+  externalId      String?   @map("external_id") @db.VarChar(255)
+  failureReason   String?   @map("failure_reason") @db.Text
+  invoiceUrl      String?   @map("invoice_url") @db.VarChar(500)
+  invoiceNumber   String?   @map("invoice_number") @db.VarChar(100)
+  paidAt          DateTime? @map("paid_at")
+  createdAt       DateTime  @default(now()) @map("created_at")
+
+  organization Organization  @relation(fields: [organizationId], references: [id])
+  subscription Subscription? @relation(fields: [subscriptionId], references: [id])
+  country      Country       @relation(fields: [countryId], references: [id])
+
+  @@index([organizationId])
+  @@index([status])
+  @@map("payments")
+}
+
+// ============================================================
+// INSTALACIONES Y CACHE
+// ============================================================
+
+model InstallationJob {
+  id               String    @id @default(uuid()) @db.Uuid
+  installerId      String    @map("installer_id") @db.Uuid
+  deviceId         String    @map("device_id") @db.Uuid
+  vehicleId        String?   @map("vehicle_id") @db.Uuid
+  organizationId   String?   @map("organization_id") @db.Uuid
+  scheduledAt      DateTime? @map("scheduled_at")
+  address          String?   @db.VarChar(500)
+  contactName      String?   @map("contact_name") @db.VarChar(100)
+  contactPhone     String?   @map("contact_phone") @db.VarChar(50)
+  notes            String?   @db.Text
+  status           String    @default("pending") @db.VarChar(20)
+  completedAt      DateTime? @map("completed_at")
+  durationMin      Int?      @map("duration_min")
+  installPhotos    Json      @default("[]") @map("install_photos")
+  installNotes     String?   @map("install_notes") @db.Text
+  rating           Int?      @db.SmallInt
+  review           String?   @db.Text
+  reviewedAt       DateTime? @map("reviewed_at")
+  commissionAmount Decimal?  @map("commission_amount") @db.Decimal(10, 2)
+  commissionPaid   Boolean   @default(false) @map("commission_paid")
+  commissionPaidAt DateTime? @map("commission_paid_at")
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime  @updatedAt @map("updated_at")
+
+  installer Installer @relation(fields: [installerId], references: [id])
+  device    Device    @relation(fields: [deviceId], references: [id])
+
+  @@index([installerId])
+  @@index([status])
+  @@map("installation_jobs")
+}
+
+model GeocodingCache {
+  id               String   @id @default(uuid()) @db.Uuid
+  cacheKey         String   @unique @map("cache_key") @db.VarChar(64)
+  queryType        String   @map("query_type") @db.VarChar(20)
+  latInput         Decimal? @map("lat_input") @db.Decimal(10, 7)
+  lngInput         Decimal? @map("lng_input") @db.Decimal(10, 7)
+  addressInput     String?  @map("address_input") @db.VarChar(500)
+  result           Json
+  formattedAddress String?  @map("formatted_address") @db.VarChar(500)
+  lat              Decimal? @db.Decimal(10, 7)
+  lng              Decimal? @db.Decimal(10, 7)
+  placeId          String?  @map("place_id") @db.VarChar(255)
+  hits             Int      @default(1)
+  expiresAt        DateTime @default(dbgenerated("NOW() + INTERVAL '30 days'")) @map("expires_at")
+  createdAt        DateTime @default(now()) @map("created_at")
+
+  @@index([cacheKey])
+  @@index([expiresAt])
+  @@map("geocoding_cache")
+}
+
+// Nota: userId almacena el email del usuario Traccar (TEXT, no UUID).
+// Desplegada con migración standalone 20260303000002_notifications_supabase.
+// Preserva nombres de campo del frontend (tipo, mensaje, leido, dispositivo).
+model Notification {
+  id          String   @id @default(uuid()) @db.Uuid
+  userId      String   @map("user_id") @db.Text
+  tipo        String   @db.VarChar(30)
+  mensaje     String   @db.Text
+  dispositivo String?  @db.VarChar(255)
+  leido       Boolean  @default(false)
+  fuente      String   @default("alerta") @db.VarChar(20)
+  data        Json     @default("{}")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@index([userId])
+  @@index([createdAt(sort: Desc)])
+  @@map("notifications")
+}
+
+model AuditLog {
+  id              BigInt   @id @default(autoincrement())
+  organizationId  String?  @map("organization_id") @db.Uuid
+  userId          String?  @map("user_id") @db.Uuid
+  installerId     String?  @map("installer_id") @db.Uuid
+  platformAdminId String?  @map("platform_admin_id") @db.Uuid
+  action          String   @db.VarChar(100)
+  resourceType    String?  @map("resource_type") @db.VarChar(50)
+  resourceId      String?  @map("resource_id") @db.Uuid
+  changes         Json     @default("{}")
+  ipAddress       String?  @map("ip_address") @db.VarChar(45)
+  userAgent       String?  @map("user_agent") @db.Text
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  organization  Organization?  @relation(fields: [organizationId], references: [id])
+  user          User?          @relation(fields: [userId], references: [id])
+  platformAdmin PlatformAdmin? @relation(fields: [platformAdminId], references: [id])
+
+  @@index([organizationId])
+  @@index([userId])
+  @@index([action])
+  @@map("audit_logs")
+}

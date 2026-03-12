@@ -1,0 +1,11 @@
+{
+    "version": 2,
+    "builds": [
+      { "src": "package.json", "use": "@vercel/static-build" },
+      { "src": "api/webhooks/traccar.js", "use": "@vercel/node" }
+    ],
+    "routes": [
+      { "src": "/api/webhooks/traccar", "dest": "api/webhooks/traccar.js" },
+      { "src": "/(.*)", "dest": "/$1" }
+    ]
+  }

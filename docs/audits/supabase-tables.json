@@ -1,0 +1,132 @@
+[
+    {
+      "json_agg": [
+        {
+          "table_name": "device_events"
+        },
+        {
+          "table_name": "devices"
+        },
+        {
+          "table_name": "brain_items"
+        },
+        {
+          "table_name": "brain_tasks"
+        },
+        {
+          "table_name": "brain_projects"
+        },
+        {
+          "table_name": "brain_habit_logs"
+        },
+        {
+          "table_name": "brain_journal_entries"
+        },
+        {
+          "table_name": "brain_financial_transactions"
+        },
+        {
+          "table_name": "brain_decisions"
+        },
+        {
+          "table_name": "vehicle_status"
+        },
+        {
+          "table_name": "plans"
+        },
+        {
+          "table_name": "plan_prices"
+        },
+        {
+          "table_name": "countries"
+        },
+        {
+          "table_name": "organizations"
+        },
+        {
+          "table_name": "users"
+        },
+        {
+          "table_name": "installers"
+        },
+        {
+          "table_name": "vehicle_drivers"
+        },
+        {
+          "table_name": "savings_stats"
+        },
+        {
+          "table_name": "vehicles"
+        },
+        {
+          "table_name": "vehicle_documents"
+        },
+        {
+          "table_name": "brain_habits"
+        },
+        {
+          "table_name": "brain_inbox"
+        },
+        {
+          "table_name": "vehicle_weekly_stats"
+        },
+        {
+          "table_name": "leads"
+        },
+        {
+          "table_name": "brain_chat_history"
+        },
+        {
+          "table_name": "brain_focus"
+        },
+        {
+          "table_name": "_prisma_migrations"
+        },
+        {
+          "table_name": "geocoding_cache"
+        },
+        {
+          "table_name": "geofences"
+        },
+        {
+          "table_name": "places"
+        },
+        {
+          "table_name": "alerts"
+        },
+        {
+          "table_name": "trips"
+        },
+        {
+          "table_name": "planned_routes"
+        },
+        {
+          "table_name": "route_events"
+        },
+        {
+          "table_name": "maintenance_records"
+        },
+        {
+          "table_name": "subscriptions"
+        },
+        {
+          "table_name": "payments"
+        },
+        {
+          "table_name": "installation_jobs"
+        },
+        {
+          "table_name": "notifications"
+        },
+        {
+          "table_name": "audit_logs"
+        },
+        {
+          "table_name": "platform_admins"
+        },
+        {
+          "table_name": "_VehicleGeofences"
+        }
+      ]
+    }
+  ]

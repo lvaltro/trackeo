@@ -1,0 +1,174 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+/* Clase para ocultar la barra de scroll */
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+.no-scrollbar {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+/* Scrollbar fino para columnas laterales */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+    @apply bg-slate-100 dark:bg-slate-800/50;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-slate-300 dark:bg-slate-600 rounded-full;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    @apply bg-slate-400 dark:bg-slate-500;
+}
+
+/* ─── Animación pulse sutil para botón "Protegido" ─── */
+@keyframes pulse-subtle {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4); }
+    50% { box-shadow: 0 0 0 8px rgba(34, 197, 94, 0); }
+}
+.animate-pulse-subtle {
+    animation: pulse-subtle 2s ease-in-out infinite;
+}
+
+/* ─── Pulse para FAB con protección activa ─── */
+@keyframes pulse-fab {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.5); }
+    50% { box-shadow: 0 0 0 12px rgba(34, 197, 94, 0); }
+}
+.animate-pulse-fab {
+    animation: pulse-fab 2s ease-in-out infinite;
+}
+
+/* ─── Glow effect para alertas no leídas en el Activity Feed ─── */
+@keyframes feed-glow {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(245, 158, 11, 0),
+                    0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    }
+    50% {
+        box-shadow: 0 0 12px 2px rgba(245, 158, 11, 0.15),
+                    0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    }
+}
+.animate-feed-glow {
+    animation: feed-glow 2.5s ease-in-out infinite;
+}
+
+/* Dark mode: glow más sutil */
+.dark .animate-feed-glow {
+    animation: feed-glow-dark 2.5s ease-in-out infinite;
+}
+@keyframes feed-glow-dark {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(245, 158, 11, 0),
+                    0 1px 3px 0 rgba(0, 0, 0, 0.3);
+    }
+    50% {
+        box-shadow: 0 0 16px 3px rgba(245, 158, 11, 0.1),
+                    0 1px 3px 0 rgba(0, 0, 0, 0.3);
+    }
+}
+
+/* ─── Wiggle animation for edit mode (drag & drop) ─── */
+@keyframes wiggle {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-1.5deg); }
+    75% { transform: rotate(1.5deg); }
+}
+.animate-wiggle {
+    animation: wiggle 0.3s ease-in-out infinite;
+}
+
+/* ─── Pulse ring for edit mode indicator ─── */
+@keyframes pulse-ring-orange {
+    0% { box-shadow: 0 0 0 0 rgba(249, 115, 22, 0.6); }
+    70% { box-shadow: 0 0 0 10px rgba(249, 115, 22, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(249, 115, 22, 0); }
+}
+.animate-pulse-ring-orange {
+    animation: pulse-ring-orange 1.5s ease-out infinite;
+}
+
+/* ─── Slide up (PWA install banner) ─── */
+@keyframes slide-up {
+    from { transform: translateY(100%); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+.animate-slide-up {
+    animation: slide-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* ─── Slide in from top (edit toolbar) ─── */
+@keyframes slide-in-top {
+    from { transform: translate(-50%, -100%); opacity: 0; }
+    to { transform: translate(-50%, 0); opacity: 1; }
+}
+.animate-slide-in-top {
+    animation: slide-in-top 0.3s ease-out forwards;
+}
+
+/* ─── Slide in from bottom (pro widget) ─── */
+@keyframes slide-in-bottom {
+    from { transform: translateY(100%); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+.animate-slide-in-bottom {
+    animation: slide-in-bottom 0.3s ease-out forwards;
+}
+
+/* ─── FAB Smart Dial: Anillo de pulso orgánico ─── */
+@keyframes fab-pulse-ring {
+    0% {
+        transform: scale(1);
+        opacity: 0.55;
+    }
+    50% {
+        transform: scale(1.35);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 0;
+    }
+}
+.animate-fab-pulse-ring {
+    animation: fab-pulse-ring 2.4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    border-radius: 9999px;
+    pointer-events: none;
+}
+
+/* ─── Leaflet Map: Filtro 'Slate Blue' en Dark Mode ─── */
+.dark .leaflet-tile-pane {
+    filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%) saturate(120%);
+    transition: filter 0.3s ease;
+}
+
+/* ─── Leaflet Zoom Controls: Dark Mode ─── */
+.dark .leaflet-bar {
+    border: 1px solid #0f172a;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+.dark .leaflet-bar a {
+    background-color: #1e293b !important;
+    color: #f8fafc !important;
+    border-color: #0f172a !important;
+}
+.dark .leaflet-bar a:hover {
+    background-color: #334155 !important;
+}
+.dark .leaflet-bar a.leaflet-disabled {
+    background-color: #0f172a !important;
+    color: #475569 !important;
+}
+
+/* ─── Leaflet attribution: Dark Mode ─── */
+.dark .leaflet-control-attribution {
+    background-color: rgba(15, 23, 42, 0.85) !important;
+    color: #64748b !important;
+}
+.dark .leaflet-control-attribution a {
+    color: #94a3b8 !important;
+}

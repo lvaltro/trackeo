@@ -1,0 +1,385 @@
+{
+  "generatedAt": "2026-03-12T01:19:19.750Z",
+  "schemaFetched": true,
+  "schemaSource": "json",
+  "schemaError": null,
+  "summary": {
+    "tablesInCode": 8,
+    "tablesInDb": 46,
+    "tablesOnlyInCode": 1,
+    "tablesOnlyInDb": 39
+  },
+  "tablesOnlyInCode": [
+    "device_positions"
+  ],
+  "tablesOnlyInDb": [
+    "brain_items",
+    "brain_tasks",
+    "brain_projects",
+    "brain_habit_logs",
+    "brain_journal_entries",
+    "brain_financial_transactions",
+    "brain_decisions",
+    "plans",
+    "plan_prices",
+    "countries",
+    "organizations",
+    "users",
+    "installers",
+    "vehicle_drivers",
+    "savings_stats",
+    "vehicles",
+    "brain_habits",
+    "brain_inbox",
+    "leads",
+    "brain_chat_history",
+    "brain_focus",
+    "_prisma_migrations",
+    "geocoding_cache",
+    "geofences",
+    "places",
+    "alerts",
+    "trips",
+    "planned_routes",
+    "route_events",
+    "subscriptions",
+    "payments",
+    "installation_jobs",
+    "audit_logs",
+    "platform_admins",
+    "_VehicleGeofences",
+    "brain_today_habits",
+    "brain_monthly_finances",
+    "brain_timeline",
+    "brain_pending_tasks"
+  ],
+  "tableDetails": [
+    {
+      "table": "vehicle_status",
+      "files": [
+        "src\\hooks\\useVehicleTracker.js"
+      ],
+      "columnsInCode": [
+        "device_id",
+        "last_speed",
+        "last_latitude",
+        "last_longitude",
+        "is_online",
+        "last_update",
+        "ignition"
+      ],
+      "columnsInDb": [
+        "device_id",
+        "last_latitude",
+        "last_longitude",
+        "last_speed",
+        "ignition",
+        "is_online",
+        "last_update",
+        "updated_at"
+      ],
+      "columnsOnlyInCode": [],
+      "columnsOnlyInDb": [
+        "updated_at"
+      ]
+    },
+    {
+      "table": "devices",
+      "files": [
+        "server\\middleware\\ownership.js",
+        "app\\api\\admin\\health\\route.ts",
+        "app\\api\\worker\\process\\route.ts"
+      ],
+      "columnsInCode": [
+        "id"
+      ],
+      "columnsInDb": [
+        "battery_level",
+        "signal_strength",
+        "is_online",
+        "created_at",
+        "updated_at",
+        "id",
+        "organization_id",
+        "installer_id",
+        "installed_at",
+        "installed_by",
+        "install_photos",
+        "config",
+        "last_seen",
+        "last_lat",
+        "last_lng",
+        "imei",
+        "serial_number",
+        "device_type",
+        "brand",
+        "model",
+        "firmware_version",
+        "sim_iccid",
+        "sim_phone",
+        "sim_carrier",
+        "install_notes",
+        "relay_status",
+        "status"
+      ],
+      "columnsOnlyInCode": [],
+      "columnsOnlyInDb": [
+        "battery_level",
+        "signal_strength",
+        "is_online",
+        "created_at",
+        "updated_at",
+        "organization_id",
+        "installer_id",
+        "installed_at",
+        "installed_by",
+        "install_photos",
+        "config",
+        "last_seen",
+        "last_lat",
+        "last_lng",
+        "imei",
+        "serial_number",
+        "device_type",
+        "brand",
+        "model",
+        "firmware_version",
+        "sim_iccid",
+        "sim_phone",
+        "sim_carrier",
+        "install_notes",
+        "relay_status",
+        "status"
+      ]
+    },
+    {
+      "table": "notifications",
+      "files": [
+        "server\\routes\\health.js",
+        "core\\notifications\\index.js"
+      ],
+      "columnsInCode": [
+        "id",
+        "user_id",
+        "tipo",
+        "mensaje",
+        "dispositivo",
+        "leido",
+        "fuente",
+        "created_at",
+        "data"
+      ],
+      "columnsInDb": [
+        "id",
+        "organization_id",
+        "user_id",
+        "alert_id",
+        "data",
+        "sent_at",
+        "read_at",
+        "created_at",
+        "leido",
+        "type",
+        "title",
+        "body",
+        "channel",
+        "status"
+      ],
+      "columnsOnlyInCode": [
+        "tipo",
+        "mensaje",
+        "dispositivo",
+        "fuente"
+      ],
+      "columnsOnlyInDb": [
+        "organization_id",
+        "alert_id",
+        "sent_at",
+        "read_at",
+        "type",
+        "title",
+        "body",
+        "channel",
+        "status"
+      ]
+    },
+    {
+      "table": "vehicle_documents",
+      "files": [
+        "core\\documents\\index.js"
+      ],
+      "columnsInCode": [],
+      "columnsInDb": [
+        "id",
+        "vehicle_id",
+        "issue_date",
+        "expiration_date",
+        "created_at",
+        "updated_at",
+        "expires_at",
+        "organization_id",
+        "type",
+        "status",
+        "file_url"
+      ],
+      "columnsOnlyInCode": [],
+      "columnsOnlyInDb": [
+        "id",
+        "vehicle_id",
+        "issue_date",
+        "expiration_date",
+        "created_at",
+        "updated_at",
+        "expires_at",
+        "organization_id",
+        "type",
+        "status",
+        "file_url"
+      ]
+    },
+    {
+      "table": "device_positions",
+      "files": [
+        "core\\jobs\\weeklyStats.js",
+        "app\\api\\worker\\process\\route.ts"
+      ],
+      "columnsInCode": [
+        "device_id",
+        "latitude",
+        "longitude",
+        "speed",
+        "recorded_at",
+        "id"
+      ],
+      "columnsInDb": [],
+      "columnsOnlyInCode": [],
+      "columnsOnlyInDb": []
+    },
+    {
+      "table": "device_events",
+      "files": [
+        "core\\jobs\\weeklyStats.js",
+        "app\\api\\worker\\process\\route.ts"
+      ],
+      "columnsInCode": [
+        "device_id",
+        "event_type",
+        "attributes",
+        "recorded_at"
+      ],
+      "columnsInDb": [
+        "position_data",
+        "attributes",
+        "created_at",
+        "device_id",
+        "server_time",
+        "id",
+        "event_type"
+      ],
+      "columnsOnlyInCode": [
+        "recorded_at"
+      ],
+      "columnsOnlyInDb": [
+        "position_data",
+        "created_at",
+        "server_time",
+        "id"
+      ]
+    },
+    {
+      "table": "vehicle_weekly_stats",
+      "files": [
+        "core\\jobs\\weeklyStats.js"
+      ],
+      "columnsInCode": [
+        "score",
+        "km_total"
+      ],
+      "columnsInDb": [
+        "id",
+        "week_start",
+        "km_total",
+        "driving_minutes",
+        "trips_count",
+        "max_speed_kmh",
+        "avg_speed_kmh",
+        "overspeed_count",
+        "harsh_brake_count",
+        "harsh_accel_count",
+        "score",
+        "prev_score",
+        "prev_km",
+        "daily_km",
+        "calculated_at",
+        "created_at",
+        "updated_at",
+        "organization_id",
+        "vehicle_id"
+      ],
+      "columnsOnlyInCode": [],
+      "columnsOnlyInDb": [
+        "id",
+        "week_start",
+        "driving_minutes",
+        "trips_count",
+        "max_speed_kmh",
+        "avg_speed_kmh",
+        "overspeed_count",
+        "harsh_brake_count",
+        "harsh_accel_count",
+        "prev_score",
+        "prev_km",
+        "daily_km",
+        "calculated_at",
+        "created_at",
+        "updated_at",
+        "organization_id",
+        "vehicle_id"
+      ]
+    },
+    {
+      "table": "maintenance_records",
+      "files": [
+        "core\\maintenance\\index.js"
+      ],
+      "columnsInCode": [],
+      "columnsInDb": [
+        "id",
+        "organization_id",
+        "vehicle_id",
+        "scheduled_date",
+        "scheduled_km",
+        "next_service_km",
+        "completed_date",
+        "completed_km",
+        "completed_by",
+        "cost",
+        "created_at",
+        "type",
+        "title",
+        "notes",
+        "invoice_url",
+        "status"
+      ],
+      "columnsOnlyInCode": [],
+      "columnsOnlyInDb": [
+        "id",
+        "organization_id",
+        "vehicle_id",
+        "scheduled_date",
+        "scheduled_km",
+        "next_service_km",
+        "completed_date",
+        "completed_km",
+        "completed_by",
+        "cost",
+        "created_at",
+        "type",
+        "title",
+        "notes",
+        "invoice_url",
+        "status"
+      ]
+    }
+  ]
+}
