@@ -5,6 +5,7 @@ const { requireAuth } = require('../middleware/auth');
 const { requireVehicleOwnership } = require('../middleware/ownership');
 const { validateBody } = require('../middleware/validate');
 const { logError } = require('../lib/logger');
+const { audit } = require('../lib/auditLogger');
 
 const router = Router();
 
@@ -56,7 +57,8 @@ router.get('/:vehicleId', async (req, res) => {
  */
 router.post('/:vehicleId', validateBody(createSchema), async (req, res) => {
   try {
-    const record = await maintenance.create(req.params.vehicleId, req.validated);
+    const record = await maintenance.create(req.params.vehicleId, req.validated, req.user?.organizationId ?? null);
+    audit(req, { action: 'MAINTENANCE_CREATE', resourceType: 'maintenance_record', resourceId: record.id, changes: { created: req.validated } });
     return res.status(201).json(record);
   } catch (err) {
     logError('Maintenance:create', 'Error creando registro', err.message);
@@ -71,6 +73,7 @@ router.put('/:vehicleId/:id', validateBody(updateSchema), async (req, res) => {
   try {
     const record = await maintenance.update(req.params.id, req.params.vehicleId, req.validated);
     if (!record) return res.status(404).json({ error: 'Registro no encontrado.' });
+    audit(req, { action: 'MAINTENANCE_UPDATE', resourceType: 'maintenance_record', resourceId: req.params.id, changes: { patch: req.validated } });
     return res.json(record);
   } catch (err) {
     logError('Maintenance:update', 'Error actualizando registro', err.message);
@@ -84,6 +87,7 @@ router.put('/:vehicleId/:id', validateBody(updateSchema), async (req, res) => {
 router.delete('/:vehicleId/:id', async (req, res) => {
   try {
     await maintenance.remove(req.params.id, req.params.vehicleId);
+    audit(req, { action: 'MAINTENANCE_DELETE', resourceType: 'maintenance_record', resourceId: req.params.id, changes: { vehicle_id: req.params.vehicleId } });
     return res.json({ ok: true });
   } catch (err) {
     logError('Maintenance:delete', 'Error eliminando registro', err.message);

@@ -13,5 +13,12 @@ module.exports = defineConfig({
       '../core/**/__tests__/**/*.test.js',
     ],
     globals: false,
+    // Force Vitest to process core/ through its own module runner
+    // so that vi.mock() intercepts require() calls inside CJS modules.
+    server: {
+      deps: {
+        inline: [/\/core\//],
+      },
+    },
   },
 });

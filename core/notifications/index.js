@@ -8,20 +8,13 @@
  *   tipo, mensaje, dispositivo, leido, fuente, createdAt
  */
 
-const { createClient } = require('@supabase/supabase-js');
+const supabaseLib = require('../lib/supabaseClient');
 
 const TABLE = 'notifications';
 const SEVEN_DAYS_MS = 7 * 24 * 60 * 60 * 1000;
 
 // Cache del tamaño total (para health check síncrono)
 let _cachedSize = 0;
-
-function getClient() {
-  const url = process.env.SUPABASE_URL;
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (!url || !key) throw new Error('SUPABASE_URL y SUPABASE_SERVICE_ROLE_KEY son requeridos');
-  return createClient(url, key);
-}
 
 /** Mapea fila de DB al shape que espera el frontend */
 function rowToNotification(row) {
@@ -47,9 +40,10 @@ const TIPOS_VALIDOS = ['geovalla', 'motor', 'mantenimiento', 'alerta', 'perfil',
  * @param {string|null} dispositivo
  * @param {boolean} leido
  * @param {string} userId - Email del usuario
+ * @param {string|null} [organizationId] - UUID de la organización. null hasta que RBAC esté implementado.
  * @returns {{ ok: true, notification } | { ok: false, error: string }}
  */
-async function addNotification(tipo, mensaje, dispositivo, leido, userId) {
+async function addNotification(tipo, mensaje, dispositivo, leido, userId, organizationId = null) {
   if (!tipo || !TIPOS_VALIDOS.includes(tipo)) {
     return { ok: false, error: `Tipo inválido: "${tipo}". Debe ser uno de: ${TIPOS_VALIDOS.join(', ')}` };
   }
@@ -59,20 +53,21 @@ async function addNotification(tipo, mensaje, dispositivo, leido, userId) {
 
   let sb;
   try {
-    sb = getClient();
+    sb = supabaseLib.getClient();
   } catch (err) {
     console.error('[Notifications] Supabase no configurado:', err.message);
     return { ok: false, error: 'Servicio de notificaciones no disponible.' };
   }
 
   const insert = {
-    user_id:     userId,
+    user_id:         userId,
+    organization_id: organizationId,
     tipo,
-    mensaje:     mensaje.trim(),
-    dispositivo: dispositivo || null,
-    leido:       leido === true,
-    fuente:      leido === true ? 'usuario' : 'alerta',
-    data:        {},
+    mensaje:         mensaje.trim(),
+    dispositivo:     dispositivo || null,
+    leido:           leido === true,
+    fuente:          leido === true ? 'usuario' : 'alerta',
+    data:            {},
   };
 
   const { data, error } = await sb.from(TABLE).insert(insert).select().single();
@@ -97,7 +92,7 @@ async function getNotifications(userId, limit = 50) {
 
   let sb;
   try {
-    sb = getClient();
+    sb = supabaseLib.getClient();
   } catch {
     return [];
   }
@@ -128,7 +123,7 @@ async function getNotifications(userId, limit = 50) {
 async function markRead(id, userId) {
   let sb;
   try {
-    sb = getClient();
+    sb = supabaseLib.getClient();
   } catch {
     return { status: 'not-found' };
   }
@@ -157,7 +152,7 @@ async function markRead(id, userId) {
 async function markAllRead(userId) {
   let sb;
   try {
-    sb = getClient();
+    sb = supabaseLib.getClient();
   } catch {
     return 0;
   }
@@ -183,7 +178,7 @@ async function cleanupOld(maxDays = 7) {
 
   let sb;
   try {
-    sb = getClient();
+    sb = supabaseLib.getClient();
   } catch {
     return 0;
   }
@@ -221,7 +216,7 @@ function getSize() {
 async function createSystemNotification({ tipo, mensaje, userId, dispositivo, data = {} }) {
   let sb;
   try {
-    sb = getClient();
+    sb = supabaseLib.getClient();
   } catch (err) {
     console.error('[Notifications] Supabase no configurado:', err.message);
     return null;

@@ -162,6 +162,7 @@ async function calculateWeeklyStats(vehicleId, weekStart) {
   // ─── Upsert en Supabase ───
   const record = {
     vehicle_id:       vehicleId,
+    organization_id:  null, // Se llenará cuando RBAC esté implementado (task 1.9b)
     week_start:       weekStart,
     km_total:         Math.round(kmTotal * 10) / 10,
     driving_minutes:  Math.round(drivingMinutes),

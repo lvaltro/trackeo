@@ -6,7 +6,7 @@
  * vehicle_id = device_id de Traccar (TEXT, no UUID de vehicles table).
  */
 
-const { createClient } = require('@supabase/supabase-js');
+const supabaseLib = require('../lib/supabaseClient');
 
 const TABLE = 'vehicle_documents';
 
@@ -18,13 +18,6 @@ const TIPOS_VALIDOS = [
   'licencia',
   'otro',
 ];
-
-function getClient() {
-  const url = process.env.SUPABASE_URL;
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (!url || !key) throw new Error('SUPABASE_URL y SUPABASE_SERVICE_ROLE_KEY son requeridos');
-  return createClient(url, key);
-}
 
 /**
  * Calcular status según fecha de vencimiento.
@@ -44,7 +37,7 @@ function calcStatus(expiresAt) {
  * @returns {object[]}
  */
 async function listByVehicle(vehicleId) {
-  const sb = getClient();
+  const sb = supabaseLib.getClient();
   const { data, error } = await sb
     .from(TABLE)
     .select('*')
@@ -59,9 +52,10 @@ async function listByVehicle(vehicleId) {
  * Crear documento.
  * @param {string} vehicleId
  * @param {object} fields - { type, title, expires_at, issue_date?, notes?, reminder_days?, file_url?, metadata? }
+ * @param {string|null} [organizationId] - UUID de la organización. null hasta que RBAC esté implementado.
  * @returns {object} documento creado
  */
-async function create(vehicleId, fields) {
+async function create(vehicleId, fields, organizationId = null) {
   const { type, title, expires_at } = fields;
   if (!type || !TIPOS_VALIDOS.includes(type)) {
     throw new Error(`Tipo inválido: "${type}". Debe ser uno de: ${TIPOS_VALIDOS.join(', ')}`);
@@ -69,18 +63,19 @@ async function create(vehicleId, fields) {
   if (!title) throw new Error('El campo "title" es obligatorio.');
   if (!expires_at) throw new Error('El campo "expires_at" es obligatorio.');
 
-  const sb = getClient();
+  const sb = supabaseLib.getClient();
   const insert = {
-    vehicle_id:    vehicleId,
-    type:          fields.type,
-    title:         fields.title,
-    expires_at:    fields.expires_at,
-    issue_date:    fields.issue_date    || null,
-    notes:         fields.notes         || null,
-    reminder_days: fields.reminder_days || [30, 7, 0],
-    file_url:      fields.file_url      || null,
-    metadata:      fields.metadata      || {},
-    status:        calcStatus(fields.expires_at),
+    vehicle_id:      vehicleId,
+    organization_id: organizationId,
+    type:            fields.type,
+    title:           fields.title,
+    expires_at:      fields.expires_at,
+    issue_date:      fields.issue_date    || null,
+    notes:           fields.notes         || null,
+    reminder_days:   fields.reminder_days || [30, 7, 0],
+    file_url:        fields.file_url      || null,
+    metadata:        fields.metadata      || {},
+    status:          calcStatus(fields.expires_at),
   };
 
   const { data, error } = await sb.from(TABLE).insert(insert).select().single();
@@ -105,7 +100,7 @@ async function update(id, vehicleId, fields) {
     rest.status = calcStatus(rest.expires_at);
   }
 
-  const sb = getClient();
+  const sb = supabaseLib.getClient();
   const { data, error } = await sb
     .from(TABLE)
     .update(rest)
@@ -124,7 +119,7 @@ async function update(id, vehicleId, fields) {
  * @param {string} vehicleId
  */
 async function remove(id, vehicleId) {
-  const sb = getClient();
+  const sb = supabaseLib.getClient();
   const { error } = await sb
     .from(TABLE)
     .delete()
@@ -140,7 +135,7 @@ async function remove(id, vehicleId) {
  * @returns {object[]}
  */
 async function getExpiringSoon(withinDays = 30) {
-  const sb = getClient();
+  const sb = supabaseLib.getClient();
   const until = new Date();
   until.setDate(until.getDate() + withinDays);
 

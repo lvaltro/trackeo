@@ -5,6 +5,7 @@ const { requireAuth } = require('../middleware/auth');
 const { validateBody } = require('../middleware/validate');
 const { getDevicePosition, getAppUrl } = require('../lib/traccar');
 const { logError } = require('../lib/logger');
+const { audit } = require('../lib/auditLogger');
 
 const router = Router();
 
@@ -31,6 +32,7 @@ router.post('/', requireAuth, validateBody(createSchema), async (req, res) => {
     const userName = req.user.name || req.user.email || 'Usuario';
     const share = liveShare.createShare(deviceId, deviceName, hours, req.user.email, userName, appUrl);
     console.log(`[LiveShare] Nuevo link: ${share.url} (expira ${new Date(share.expiresAt).toLocaleString()})`);
+    audit(req, { action: 'LIVE_SHARE_CREATE', resourceType: 'live_share', resourceId: share.token, changes: { deviceId, deviceName, hours } });
 
     return res.json({
       token: share.token,
@@ -96,6 +98,7 @@ router.delete('/:token', requireAuth, async (req, res) => {
   if (result.status === 'forbidden') return res.status(403).json({ error: 'No tienes permiso para cancelar este link.' });
 
   console.log(`[LiveShare] Link cancelado: ${token}`);
+  audit(req, { action: 'LIVE_SHARE_DELETE', resourceType: 'live_share', resourceId: token });
   return res.json({ ok: true });
 });
 

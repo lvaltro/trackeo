@@ -1,6 +1,6 @@
 # Trackeo System — Roadmap Status
 
-Last updated: 2026-03-05 (session active)
+Last updated: 2026-04-01
 
 ## Current Phase: FASE 1 — Consolidar SaaS
 
@@ -10,12 +10,12 @@ Last updated: 2026-03-05 (session active)
 |---|---|---|---|
 | 1.1 | Ownership middleware (verify user owns vehicleId via org) | DONE | middleware/ownership.js: Traccar devices -> IMEI -> Supabase UUID. Applied to maintenance, documents, weeklyStats. 60s cache. |
 | 1.2 | Modularize server/index.js into routes/ + middleware/ | DONE | 655 -> 111 lines. 8 route files, 4 middleware, 2 lib modules. |
-| 1.3 | Zod validation on all endpoints | NOT STARTED | Install zod, create schemas |
-| 1.4 | Activate AuditLog (log all mutations) | NOT STARTED | Prisma model exists, not wired. Critical for installer access tracking. |
-| 1.5 | Add organization_id to standalone tables | NOT STARTED | maintenance_records, vehicle_documents, notifications, vehicle_weekly_stats |
+| 1.3 | Zod validation on all endpoints | DONE | zod ^3.23.0, validateBody/validateQuery middleware, schemas en todos los routes con body. |
+| 1.4 | Activate AuditLog (log all mutations) | DONE | core/audit/index.js + server/lib/auditLogger.js. Wired en maintenance, documents, notifications, liveShare. Migration: 20260401000005_audit_logs. Pendiente: aplicar SQL en Supabase. |
+| 1.5 | Add organization_id to standalone tables | DONE | Columna agregada vía migración 20260310000004. core/ actualizado: create() acepta organizationId (null por ahora). Filtrado por org pendiente hasta task 1.9b (RBAC). |
 | 1.6 | Global error handler + request IDs | DONE | middleware/errorHandler.js + middleware/requestId.js + X-Request-ID header |
-| 1.7 | Basic tests (vitest for core/) | NOT STARTED | Zero tests currently |
-| 1.8 | GitHub Actions CI (lint + test) | NOT STARTED | Manual deploy only today |
+| 1.7 | Basic tests (vitest for core/) | DONE | 38 tests, 4 suites: maintenance (14), audit (6), documents (10), validate (8). Patrón: createRequire + supabaseLib.getClient mock. |
+| 1.8 | GitHub Actions CI (lint + test) | DONE | .github/workflows/ci.yml — test-backend (blocking) + lint-frontend (continue-on-error hasta limpiar 69 errores preexistentes). |
 | 1.9a | organization_features table + feature flag middleware | NOT STARTED | Plan = bundle of feature keys. Never check plan name directly. |
 | 1.9b | RBAC: roles, permissions, user_roles tables + requirePermission middleware | NOT STARTED | Owner/Admin/Driver/Installer/SuperAdmin. Permission-based, not role-based checks. |
 

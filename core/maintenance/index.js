@@ -7,23 +7,16 @@
  * vehicle_id = device_id de la tabla devices (el mismo UUID de vehicle_status).
  */
 
-const { createClient } = require('@supabase/supabase-js');
+const supabaseLib = require('../lib/supabaseClient');
 
 const TABLE = 'maintenance_records';
-
-function getClient() {
-  const url = process.env.SUPABASE_URL;
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (!url || !key) throw new Error('SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY no configurados en server/.env');
-  return createClient(url, key, { auth: { persistSession: false } });
-}
 
 /**
  * Listar todos los registros (scheduled + completed) de un vehículo.
  * Ordenados por created_at DESC.
  */
 async function listByVehicle(vehicleId) {
-  const { data, error } = await getClient()
+  const { data, error } = await supabaseLib.getClient()
     .from(TABLE)
     .select('*')
     .eq('vehicle_id', vehicleId)
@@ -35,12 +28,15 @@ async function listByVehicle(vehicleId) {
 /**
  * Crear un nuevo registro de mantenimiento.
  * Campos seguros: no se puede fijar id, vehicle_id, created_at, updated_at desde fuera.
+ * @param {string} vehicleId
+ * @param {object} fields
+ * @param {string|null} [organizationId] - UUID de la organización. null hasta que RBAC esté implementado.
  */
-async function create(vehicleId, fields) {
+async function create(vehicleId, fields, organizationId = null) {
   const { id: _id, vehicle_id: _vid, created_at: _ca, updated_at: _ua, ...safe } = fields;
-  const { data, error } = await getClient()
+  const { data, error } = await supabaseLib.getClient()
     .from(TABLE)
-    .insert({ ...safe, vehicle_id: vehicleId })
+    .insert({ ...safe, vehicle_id: vehicleId, organization_id: organizationId })
     .select()
     .single();
   if (error) throw error;
@@ -53,7 +49,7 @@ async function create(vehicleId, fields) {
  */
 async function update(id, vehicleId, fields) {
   const { id: _id, vehicle_id: _vid, created_at: _ca, updated_at: _ua, ...safe } = fields;
-  const { data, error } = await getClient()
+  const { data, error } = await supabaseLib.getClient()
     .from(TABLE)
     .update(safe)
     .eq('id', id)
@@ -68,7 +64,7 @@ async function update(id, vehicleId, fields) {
  * Eliminar un registro. Solo permite eliminar registros del mismo vehículo.
  */
 async function remove(id, vehicleId) {
-  const { error } = await getClient()
+  const { error } = await supabaseLib.getClient()
     .from(TABLE)
     .delete()
     .eq('id', id)

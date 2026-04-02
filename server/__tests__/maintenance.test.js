@@ -1,149 +1,178 @@
 /**
  * Tests for core/maintenance/index.js
  *
- * These are unit tests with Supabase mocked — they run without a real DB.
+ * Strategy: use createRequire to load CJS modules directly and replace
+ * supabaseLib.getClient with a mock before requiring the module under test.
+ * This bypasses vi.mock() CJS interception issues entirely.
+ *
  * Run: cd server && npx vitest run
  */
 
 import { describe, it, expect, vi, beforeEach, beforeAll } from 'vitest';
-import * as supabaseJs from '@supabase/supabase-js';
+import { createRequire } from 'module';
 
-// ─── Mock Supabase ────────────────────────────────────────────────────────────
-// We spy on @supabase/supabase-js and override createClient before importing
-// the module under test, so core/maintenance uses the mocked client.
+const _require = createRequire(import.meta.url);
 
-const mockSingle  = vi.fn();
-const mockSelect  = vi.fn();
-const mockInsert  = vi.fn();
-const mockUpdate  = vi.fn();
-const mockDelete  = vi.fn();
-const mockEq      = vi.fn();
-const mockOrder   = vi.fn();
+// ─── Mock client setup ────────────────────────────────────────────────────────
 
-// Each builder method returns 'this' so calls can be chained
-const builder = {
-  select:  (...a) => { mockSelect(...a);  return builder; },
-  insert:  (...a) => { mockInsert(...a);  return builder; },
-  update:  (...a) => { mockUpdate(...a);  return builder; },
-  delete:  (...a) => { mockDelete(...a);  return builder; },
-  eq:      (...a) => { mockEq(...a);      return builder; },
-  order:   (...a) => { mockOrder(...a);   return builder; },
-  single:  (...a) => mockSingle(...a),
-};
+let mockFrom, builder, mockClient;
 
-const mockFrom = vi.fn(() => builder);
+function resetBuilder() {
+  const mockSingle = vi.fn();
+  const mockInsert = vi.fn();
+  const mockUpdate = vi.fn();
+  const mockDelete = vi.fn();
+  const mockEq     = vi.fn();
+  const mockOrder  = vi.fn();
+  const mockSelect = vi.fn();
 
-vi.spyOn(supabaseJs, 'createClient').mockImplementation(() => ({ from: mockFrom }));
+  builder = {
+    _spies: { mockSingle, mockInsert, mockUpdate, mockDelete, mockEq, mockOrder, mockSelect },
+    insert: vi.fn((...a) => { mockInsert(...a); return builder; }),
+    update: vi.fn((...a) => { mockUpdate(...a); return builder; }),
+    delete: vi.fn((...a) => { mockDelete(...a); return builder; }),
+    select: vi.fn((...a) => { mockSelect(...a); return builder; }),
+    eq:     vi.fn((...a) => { mockEq(...a);     return builder; }),
+    order:  vi.fn((...a) => mockOrder(...a)),
+    single: vi.fn((...a) => mockSingle(...a)),
+  };
 
-// Set env vars needed by the module
-process.env.SUPABASE_URL              = 'https://test.supabase.co';
-process.env.SUPABASE_SERVICE_ROLE_KEY = 'test-key';
+  mockFrom = vi.fn(() => builder);
+  mockClient = { from: mockFrom };
+}
 
-// Import module under test AFTER mocking, vía import dinámico,
-// para asegurar que Vitest intercepte correctamente @supabase/supabase-js.
+// ─── Wire mock before module loads ───────────────────────────────────────────
+
 let maintenance;
-beforeAll(async () => {
-  // core/maintenance/index.js es CommonJS; import() devuelve el objeto de exports.
-  // Vitest se encarga del bridging CJS/ESM.
-  // eslint-disable-next-line global-require
-  maintenance = await import('../../core/maintenance/index.js');
-  // Si viene como default (CJS bridge), normalizar:
-  if (maintenance.default) {
-    maintenance = maintenance.default;
-  }
+beforeAll(() => {
+  resetBuilder();
+
+  // Replace getClient on the supabaseLib module object BEFORE maintenance loads.
+  // Since CJS module exports are mutable objects shared by all requirers,
+  // maintenance's `supabaseLib.getClient()` calls will use this mock.
+  const supabaseLib = _require('../../core/lib/supabaseClient.js');
+  supabaseLib.getClient = vi.fn(() => mockClient);
+
+  maintenance = _require('../../core/maintenance/index.js');
 });
 
-// ─── Tests ────────────────────────────────────────────────────────────────────
+beforeEach(() => {
+  resetBuilder();
+  // Update mockClient so subsequent getClient() calls return the fresh builder
+  mockClient.from = mockFrom;
+});
 
-describe('core/maintenance — listByVehicle', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-    // Default: builder chain resolves with empty array
-    mockOrder.mockResolvedValue({ data: [], error: null });
-  });
+// ─── listByVehicle ────────────────────────────────────────────────────────────
 
-  it('returns an empty array when no records exist', async () => {
-    mockOrder.mockResolvedValueOnce({ data: [], error: null });
-    const result = await maintenance.listByVehicle('vehicle-uuid-123');
-    expect(result).toEqual([]);
+describe('listByVehicle', () => {
+  it('queries maintenance_records table', async () => {
+    builder.order.mockResolvedValueOnce({ data: [], error: null });
+    await maintenance.listByVehicle('v1');
     expect(mockFrom).toHaveBeenCalledWith('maintenance_records');
   });
 
+  it('returns empty array when no records exist', async () => {
+    builder.order.mockResolvedValueOnce({ data: [], error: null });
+    expect(await maintenance.listByVehicle('v1')).toEqual([]);
+  });
+
   it('returns records when they exist', async () => {
-    const fakeRecords = [
-      { id: 'rec-1', vehicle_id: 'vehicle-uuid-123', type: 'oil_change', title: 'Cambio aceite' },
-    ];
-    mockOrder.mockResolvedValueOnce({ data: fakeRecords, error: null });
-    const result = await maintenance.listByVehicle('vehicle-uuid-123');
+    const rows = [{ id: 'r1', vehicle_id: 'v1', type: 'oil_change', title: 'Cambio aceite' }];
+    builder.order.mockResolvedValueOnce({ data: rows, error: null });
+    const result = await maintenance.listByVehicle('v1');
     expect(result).toHaveLength(1);
     expect(result[0].type).toBe('oil_change');
   });
 
   it('throws when Supabase returns an error', async () => {
-    mockOrder.mockResolvedValueOnce({ data: null, error: new Error('DB connection failed') });
-    await expect(maintenance.listByVehicle('vehicle-uuid-123')).rejects.toThrow('DB connection failed');
+    builder.order.mockResolvedValueOnce({ data: null, error: new Error('DB connection failed') });
+    await expect(maintenance.listByVehicle('v1')).rejects.toThrow('DB connection failed');
   });
 });
 
-describe('core/maintenance — create', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
+// ─── create ──────────────────────────────────────────────────────────────────
 
+describe('create', () => {
   it('creates a record and returns it', async () => {
-    const created = { id: 'rec-new', vehicle_id: 'v-1', type: 'oil_change', title: 'Aceite 5W40' };
-    mockSingle.mockResolvedValueOnce({ data: created, error: null });
-
-    const result = await maintenance.create('v-1', { type: 'oil_change', title: 'Aceite 5W40' });
+    const created = { id: 'r-new', vehicle_id: 'v1', type: 'oil_change', title: 'Aceite 5W40' };
+    builder.single.mockResolvedValueOnce({ data: created, error: null });
+    const result = await maintenance.create('v1', { type: 'oil_change', title: 'Aceite 5W40' });
     expect(result).toMatchObject({ type: 'oil_change', title: 'Aceite 5W40' });
-    expect(mockInsert).toHaveBeenCalled();
   });
 
   it('throws when Supabase insert fails', async () => {
-    mockSingle.mockResolvedValueOnce({ data: null, error: new Error('insert failed') });
+    builder.single.mockResolvedValueOnce({ data: null, error: new Error('insert failed') });
     await expect(
-      maintenance.create('v-1', { type: 'oil_change', title: 'Aceite' })
+      maintenance.create('v1', { type: 'oil_change', title: 'Aceite' })
     ).rejects.toThrow('insert failed');
   });
 
-  it('strips protected fields (id, vehicle_id, created_at, updated_at) from input', async () => {
-    const created = { id: 'server-uuid', vehicle_id: 'v-1', type: 'brake_inspection', title: 'Frenos' };
-    mockSingle.mockResolvedValueOnce({ data: created, error: null });
-
-    await maintenance.create('v-1', {
-      id: 'injected-id',
-      vehicle_id: 'injected-vid',
-      created_at: '2020-01-01',
-      updated_at: '2020-01-01',
-      type: 'brake_inspection',
-      title: 'Frenos',
+  it('strips protected fields from input', async () => {
+    builder.single.mockResolvedValueOnce({ data: { id: 'srv' }, error: null });
+    await maintenance.create('v1', {
+      id: 'injected-id', vehicle_id: 'injected-vid',
+      created_at: '2020-01-01', updated_at: '2020-01-01',
+      type: 'brake_inspection', title: 'Frenos',
     });
+    const arg = builder.insert.mock.calls[0][0];
+    expect(arg.id).toBeUndefined();
+    expect(arg.created_at).toBeUndefined();
+    expect(arg.vehicle_id).toBe('v1');
+  });
 
-    const insertCall = mockInsert.mock.calls[0][0];
-    expect(insertCall.id).toBeUndefined();
-    expect(insertCall.created_at).toBeUndefined();
-    expect(insertCall.vehicle_id).toBe('v-1'); // Set by create(), not from input
+  it('stores organization_id when provided', async () => {
+    builder.single.mockResolvedValueOnce({ data: { id: 'r1' }, error: null });
+    await maintenance.create('v1', { type: 'oil_change', title: 'Test' }, 'org-uuid');
+    expect(builder.insert.mock.calls[0][0].organization_id).toBe('org-uuid');
+  });
+
+  it('stores null organization_id when not provided', async () => {
+    builder.single.mockResolvedValueOnce({ data: { id: 'r1' }, error: null });
+    await maintenance.create('v1', { type: 'oil_change', title: 'Test' });
+    expect(builder.insert.mock.calls[0][0].organization_id).toBeNull();
   });
 });
 
-describe('core/maintenance — remove', () => {
-  beforeEach(() => vi.clearAllMocks());
+// ─── update ──────────────────────────────────────────────────────────────────
 
-  it('calls delete with correct id and vehicleId filters', async () => {
-    mockEq.mockReturnValue(builder);
-    // Last .eq() in delete chain resolves
-    mockEq.mockImplementationOnce(() => builder)
-           .mockImplementationOnce(() => ({ error: null }));
+describe('update', () => {
+  it('returns updated record', async () => {
+    builder.single.mockResolvedValueOnce({ data: { id: 'r1', title: 'Actualizado' }, error: null });
+    const result = await maintenance.update('r1', 'v1', { title: 'Actualizado' });
+    expect(result.title).toBe('Actualizado');
+  });
 
-    await maintenance.remove('rec-1', 'v-1');
-    expect(mockDelete).toHaveBeenCalled();
+  it('throws when update fails', async () => {
+    builder.single.mockResolvedValueOnce({ data: null, error: new Error('update failed') });
+    await expect(maintenance.update('r1', 'v1', { title: 'X' })).rejects.toThrow('update failed');
+  });
+
+  it('strips protected fields from update input', async () => {
+    builder.single.mockResolvedValueOnce({ data: { id: 'r1' }, error: null });
+    await maintenance.update('r1', 'v1', { id: 'hacked', vehicle_id: 'hacked', title: 'OK' });
+    const arg = builder.update.mock.calls[0][0];
+    expect(arg.id).toBeUndefined();
+    expect(arg.vehicle_id).toBeUndefined();
+    expect(arg.title).toBe('OK');
+  });
+});
+
+// ─── remove ──────────────────────────────────────────────────────────────────
+
+describe('remove', () => {
+  it('calls delete with correct id filter', async () => {
+    builder.eq
+      .mockReturnValueOnce(builder)
+      .mockReturnValueOnce({ error: null });
+    await maintenance.remove('r1', 'v1');
+    expect(builder.delete).toHaveBeenCalled();
+    expect(builder.eq).toHaveBeenCalledWith('id', 'r1');
   });
 
   it('throws when delete fails', async () => {
-    mockEq.mockImplementationOnce(() => builder)
-           .mockImplementationOnce(() => ({ error: new Error('delete failed') }));
-
-    await expect(maintenance.remove('rec-1', 'v-1')).rejects.toThrow('delete failed');
+    builder.eq
+      .mockReturnValueOnce(builder)
+      .mockReturnValueOnce({ error: new Error('delete failed') });
+    await expect(maintenance.remove('r1', 'v1')).rejects.toThrow('delete failed');
   });
 });
-

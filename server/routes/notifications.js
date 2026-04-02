@@ -3,6 +3,7 @@ const { z } = require('zod');
 const notifications = require('../../core/notifications/index.js');
 const { requireAuth } = require('../middleware/auth');
 const { validateBody } = require('../middleware/validate');
+const { audit } = require('../lib/auditLogger');
 
 const router = Router();
 
@@ -25,10 +26,11 @@ const createSchema = z.object({
  */
 router.post('/', requireAuth, validateBody(createSchema), async (req, res) => {
   const { tipo, mensaje, dispositivo, leido } = req.validated;
-  const result = await notifications.addNotification(tipo, mensaje, dispositivo, leido, req.user.email);
+  const result = await notifications.addNotification(tipo, mensaje, dispositivo, leido, req.user.email, req.user?.organizationId ?? null);
 
   if (!result.ok) return res.status(400).json({ error: result.error });
 
+  audit(req, { action: 'NOTIFICATION_CREATE', resourceType: 'notification', resourceId: result.notification.id, changes: { tipo, mensaje, dispositivo } });
   return res.status(201).json(result.notification);
 });
 

@@ -5,6 +5,7 @@ const { requireAuth } = require('../middleware/auth');
 const { requireVehicleOwnership } = require('../middleware/ownership');
 const { validateBody } = require('../middleware/validate');
 const { logError } = require('../lib/logger');
+const { audit } = require('../lib/auditLogger');
 
 const router = Router();
 
@@ -55,7 +56,8 @@ router.get('/:vehicleId', async (req, res) => {
  */
 router.post('/:vehicleId', validateBody(createSchema), async (req, res) => {
   try {
-    const doc = await documents.create(req.params.vehicleId, req.validated);
+    const doc = await documents.create(req.params.vehicleId, req.validated, req.user?.organizationId ?? null);
+    audit(req, { action: 'DOCUMENT_CREATE', resourceType: 'vehicle_document', resourceId: doc.id, changes: { created: req.validated } });
     return res.status(201).json(doc);
   } catch (err) {
     logError('Documents:create', 'Error creando documento', err.message);
@@ -70,6 +72,7 @@ router.put('/:vehicleId/:id', validateBody(updateSchema), async (req, res) => {
   try {
     const doc = await documents.update(req.params.id, req.params.vehicleId, req.validated);
     if (!doc) return res.status(404).json({ error: 'Documento no encontrado.' });
+    audit(req, { action: 'DOCUMENT_UPDATE', resourceType: 'vehicle_document', resourceId: req.params.id, changes: { patch: req.validated } });
     return res.json(doc);
   } catch (err) {
     logError('Documents:update', 'Error actualizando documento', err.message);
@@ -83,6 +86,7 @@ router.put('/:vehicleId/:id', validateBody(updateSchema), async (req, res) => {
 router.delete('/:vehicleId/:id', async (req, res) => {
   try {
     await documents.remove(req.params.id, req.params.vehicleId);
+    audit(req, { action: 'DOCUMENT_DELETE', resourceType: 'vehicle_document', resourceId: req.params.id, changes: { vehicle_id: req.params.vehicleId } });
     return res.json({ ok: true });
   } catch (err) {
     logError('Documents:delete', 'Error eliminando documento', err.message);
