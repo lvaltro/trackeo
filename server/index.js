@@ -46,12 +46,21 @@ app.use(helmet());
 app.use(express.json({ limit: '100kb' }));
 app.use(cors);
 
-// Rate limiting (skip health check)
+// Rate limiting (skip health check).
+// Key: JSESSIONID cookie when present (per-session/user), else IP.
+// This is the Fase 1 approach — Fase 2 will switch to Supabase user UUID.
+function rateLimitKey(req) {
+  const cookie = req.headers.cookie || '';
+  const match = cookie.match(/JSESSIONID=([^;]+)/);
+  return match ? `session:${match[1]}` : `ip:${req.ip}`;
+}
+
 const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 100,
   standardHeaders: true,
   legacyHeaders: false,
+  keyGenerator: rateLimitKey,
   message: { error: 'Demasiadas solicitudes. Intenta de nuevo en unos minutos.' },
 });
 app.use('/api', (req, res, next) => {

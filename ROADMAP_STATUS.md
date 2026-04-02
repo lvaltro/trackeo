@@ -24,9 +24,9 @@ Last updated: 2026-04-01
 | # | Task | Status | Notes |
 |---|---|---|---|
 | 1.9 | API versioning (/api/v1/) | NOT STARTED | Needed before external consumers |
-| 1.10 | Structured logging (pino) | NOT STARTED | Replace console.log + logError |
-| 1.11 | Rate limit per user (not per IP) | NOT STARTED | Current: 100/15min per IP |
-| 1.12 | CORS from env vars (not hardcoded) | NOT STARTED | |
+| 1.10 | Structured logging (pino) | DONE | pino ^9.0.0 en server/lib/logger.js. logError/logInfo. LOG_LEVEL env var. |
+| 1.11 | Rate limit per user (not per IP) | DONE | keyGenerator: JSESSIONID cookie → session key, fallback IP. Fase 2: migrar a Supabase user UUID. |
+| 1.12 | CORS from env vars (not hardcoded) | DONE | CORS_ALLOWED_ORIGINS env var (comma-separated). Fallback a lista hardcoded si no está. |
 | 1.13 | Rotate Supabase service role key | NOT STARTED | Check git history first |
 
 ---
