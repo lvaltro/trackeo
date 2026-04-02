@@ -14,10 +14,10 @@ Last updated: 2026-04-01
 | 1.4 | Activate AuditLog (log all mutations) | DONE | core/audit/index.js + server/lib/auditLogger.js. Wired en maintenance, documents, notifications, liveShare. Migration: 20260401000005_audit_logs. Pendiente: aplicar SQL en Supabase. |
 | 1.5 | Add organization_id to standalone tables | DONE | Columna agregada vía migración 20260310000004. core/ actualizado: create() acepta organizationId (null por ahora). Filtrado por org pendiente hasta task 1.9b (RBAC). |
 | 1.6 | Global error handler + request IDs | DONE | middleware/errorHandler.js + middleware/requestId.js + X-Request-ID header |
-| 1.7 | Basic tests (vitest for core/) | DONE | 38 tests, 4 suites: maintenance (14), audit (6), documents (10), validate (8). Patrón: createRequire + supabaseLib.getClient mock. |
+| 1.7 | Basic tests (vitest for core/) | DONE | 50 tests, 5 suites: maintenance (14), audit (6), documents (10), validate (8), rbac (12). Patrón: createRequire + supabaseLib.getClient mock. |
 | 1.8 | GitHub Actions CI (lint + test) | DONE | .github/workflows/ci.yml — test-backend (blocking) + lint-frontend (continue-on-error hasta limpiar 69 errores preexistentes). |
 | 1.9a | organization_features table + feature flag middleware | NOT STARTED | Plan = bundle of feature keys. Never check plan name directly. |
-| 1.9b | RBAC: roles, permissions, user_roles tables + requirePermission middleware | NOT STARTED | Owner/Admin/Driver/Installer/SuperAdmin. Permission-based, not role-based checks. |
+| 1.9b | RBAC: roles, permissions, user_roles tables + requirePermission middleware | DONE | core/rbac/index.js (PERMISSIONS, ROLE_PERMISSIONS, getUserPermissions, hasPermission) + server/middleware/authorize.js (requirePermission). Fase 1 bridge: administrator=true→OWNER, false→DRIVER. Wired en maintenance, documents, liveShare. Migration: 20260401000006_rbac_tables (pendiente aplicar en Supabase). |
 
 ### Important (complete within Fase 1)
 

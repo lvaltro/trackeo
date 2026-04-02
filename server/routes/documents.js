@@ -6,6 +6,7 @@ const { requireVehicleOwnership } = require('../middleware/ownership');
 const { validateBody } = require('../middleware/validate');
 const { logError } = require('../lib/logger');
 const { audit } = require('../lib/auditLogger');
+const { requirePermission } = require('../middleware/authorize');
 
 const router = Router();
 
@@ -36,6 +37,7 @@ const updateSchema = createSchema.partial();
 // All routes in this router require auth + vehicle ownership
 router.use(requireAuth);
 router.use(requireVehicleOwnership);
+router.use(requirePermission('DOCUMENT_READ'));
 
 /**
  * GET /api/app/documents/:vehicleId
@@ -54,7 +56,7 @@ router.get('/:vehicleId', async (req, res) => {
  * POST /api/app/documents/:vehicleId
  * Body: { type, title, expires_at, issue_date?, notes?, reminder_days?, file_url?, metadata? }
  */
-router.post('/:vehicleId', validateBody(createSchema), async (req, res) => {
+router.post('/:vehicleId', requirePermission('DOCUMENT_WRITE'), validateBody(createSchema), async (req, res) => {
   try {
     const doc = await documents.create(req.params.vehicleId, req.validated, req.user?.organizationId ?? null);
     audit(req, { action: 'DOCUMENT_CREATE', resourceType: 'vehicle_document', resourceId: doc.id, changes: { created: req.validated } });
@@ -68,7 +70,7 @@ router.post('/:vehicleId', validateBody(createSchema), async (req, res) => {
 /**
  * PUT /api/app/documents/:vehicleId/:id
  */
-router.put('/:vehicleId/:id', validateBody(updateSchema), async (req, res) => {
+router.put('/:vehicleId/:id', requirePermission('DOCUMENT_WRITE'), validateBody(updateSchema), async (req, res) => {
   try {
     const doc = await documents.update(req.params.id, req.params.vehicleId, req.validated);
     if (!doc) return res.status(404).json({ error: 'Documento no encontrado.' });
@@ -83,7 +85,7 @@ router.put('/:vehicleId/:id', validateBody(updateSchema), async (req, res) => {
 /**
  * DELETE /api/app/documents/:vehicleId/:id
  */
-router.delete('/:vehicleId/:id', async (req, res) => {
+router.delete('/:vehicleId/:id', requirePermission('DOCUMENT_WRITE'), async (req, res) => {
   try {
     await documents.remove(req.params.id, req.params.vehicleId);
     audit(req, { action: 'DOCUMENT_DELETE', resourceType: 'vehicle_document', resourceId: req.params.id, changes: { vehicle_id: req.params.vehicleId } });

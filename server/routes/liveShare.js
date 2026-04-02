@@ -6,6 +6,7 @@ const { validateBody } = require('../middleware/validate');
 const { getDevicePosition, getAppUrl } = require('../lib/traccar');
 const { logError } = require('../lib/logger');
 const { audit } = require('../lib/auditLogger');
+const { requirePermission } = require('../middleware/authorize');
 
 const router = Router();
 
@@ -24,7 +25,7 @@ const createSchema = z.object({
 /**
  * POST /api/live-share — Generate temporary share link
  */
-router.post('/', requireAuth, validateBody(createSchema), async (req, res) => {
+router.post('/', requireAuth, requirePermission('VEHICLE_READ'), validateBody(createSchema), async (req, res) => {
   const { deviceId, deviceName, duration: hours } = req.validated;
 
   try {
@@ -90,7 +91,7 @@ router.get('/:token', async (req, res) => {
 /**
  * DELETE /api/live-share/:token — Cancel share link
  */
-router.delete('/:token', requireAuth, async (req, res) => {
+router.delete('/:token', requireAuth, requirePermission('VEHICLE_READ'), async (req, res) => {
   const { token } = req.params;
   const result = liveShare.deleteShare(token, req.user.email);
 

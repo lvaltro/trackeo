@@ -6,6 +6,7 @@ const { requireVehicleOwnership } = require('../middleware/ownership');
 const { validateBody } = require('../middleware/validate');
 const { logError } = require('../lib/logger');
 const { audit } = require('../lib/auditLogger');
+const { requirePermission } = require('../middleware/authorize');
 
 const router = Router();
 
@@ -37,6 +38,7 @@ const updateSchema = createSchema.partial();
 // All routes in this router require auth + vehicle ownership
 router.use(requireAuth);
 router.use(requireVehicleOwnership);
+router.use(requirePermission('MAINTENANCE_READ'));
 
 /**
  * GET /api/app/maintenance/:vehicleId
@@ -55,7 +57,7 @@ router.get('/:vehicleId', async (req, res) => {
  * POST /api/app/maintenance/:vehicleId
  * Body: { type, title, notes?, status?, completed_date?, completed_km?, completed_by?, cost?, metadata? }
  */
-router.post('/:vehicleId', validateBody(createSchema), async (req, res) => {
+router.post('/:vehicleId', requirePermission('MAINTENANCE_WRITE'), validateBody(createSchema), async (req, res) => {
   try {
     const record = await maintenance.create(req.params.vehicleId, req.validated, req.user?.organizationId ?? null);
     audit(req, { action: 'MAINTENANCE_CREATE', resourceType: 'maintenance_record', resourceId: record.id, changes: { created: req.validated } });
@@ -69,7 +71,7 @@ router.post('/:vehicleId', validateBody(createSchema), async (req, res) => {
 /**
  * PUT /api/app/maintenance/:vehicleId/:id
  */
-router.put('/:vehicleId/:id', validateBody(updateSchema), async (req, res) => {
+router.put('/:vehicleId/:id', requirePermission('MAINTENANCE_WRITE'), validateBody(updateSchema), async (req, res) => {
   try {
     const record = await maintenance.update(req.params.id, req.params.vehicleId, req.validated);
     if (!record) return res.status(404).json({ error: 'Registro no encontrado.' });
@@ -84,7 +86,7 @@ router.put('/:vehicleId/:id', validateBody(updateSchema), async (req, res) => {
 /**
  * DELETE /api/app/maintenance/:vehicleId/:id
  */
-router.delete('/:vehicleId/:id', async (req, res) => {
+router.delete('/:vehicleId/:id', requirePermission('MAINTENANCE_WRITE'), async (req, res) => {
   try {
     await maintenance.remove(req.params.id, req.params.vehicleId);
     audit(req, { action: 'MAINTENANCE_DELETE', resourceType: 'maintenance_record', resourceId: req.params.id, changes: { vehicle_id: req.params.vehicleId } });
