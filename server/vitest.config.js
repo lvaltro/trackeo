@@ -21,4 +21,7 @@ module.exports = defineConfig({
       },
     },
   },
+  // Disable CSS processing — backend tests don't need it and Vite
+  // would otherwise pick up the root postcss.config.js (tailwindcss).
+  css: false,
 });
